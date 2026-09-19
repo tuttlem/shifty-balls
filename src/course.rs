@@ -7,7 +7,9 @@
 use avian3d::prelude::*;
 use bevy::prelude::*;
 
-use crate::physics::{CourseTrack, FinishRegion, TRACK_FRICTION, TRACK_RESTITUTION};
+use crate::physics::{
+    CourseRoute, CourseTrack, FinishRegion, ProgressionGate, TRACK_FRICTION, TRACK_RESTITUTION,
+};
 
 const SURFACE_THICKNESS: f32 = 0.5;
 const SURFACE_OVERLAP: f32 = 0.3;
@@ -47,6 +49,7 @@ pub fn setup_course(
     let finish = materials.add(Color::srgb(0.85, 0.82, 0.18));
 
     let mut cursor = Vec3::new(0.0, 5.0, -22.0);
+    let mut gates = Vec::new();
     cursor = spawn_surface(
         &mut commands,
         &mut meshes,
@@ -63,6 +66,7 @@ pub fn setup_course(
         cursor,
         SurfaceSpec::new(COURSE_WIDTH, 16.0, surface_rotation(0.0, 12.0, 0.0)),
     );
+    gates.push(progression_gate(cursor, surface_rotation(0.0, 12.0, 0.0)));
 
     // The forgiving bend establishes that changing mass position changes line
     // before the stronger bank asks the player to anticipate it.
@@ -76,6 +80,7 @@ pub fn setup_course(
             SurfaceSpec::new(COURSE_WIDTH, 5.0, surface_rotation(yaw, 3.0, bank_degrees)),
         );
     }
+    gates.push(progression_gate(cursor, surface_rotation(16.0, 3.0, 6.0)));
 
     // The wider, stronger turn is the first high/low line. Walls keep a poor
     // choice consequential but usually recoverable rather than terminal.
@@ -96,6 +101,10 @@ pub fn setup_course(
             SurfaceSpec::new(14.0, 4.0, surface_rotation(yaw, 2.0, bank_degrees)),
         );
     }
+    gates.push(progression_gate(
+        cursor,
+        surface_rotation(-32.0, 2.0, -12.0),
+    ));
 
     cursor = spawn_surface(
         &mut commands,
@@ -121,6 +130,7 @@ pub fn setup_course(
         cursor,
         SurfaceSpec::new(10.0, 8.0, surface_rotation(-32.0, -2.0, 0.0)),
     );
+    gates.push(progression_gate(cursor, surface_rotation(-32.0, -2.0, 0.0)));
     let finish_start = cursor;
     let finish_rotation = surface_rotation(-32.0, 4.0, 0.0);
     let finish_end = spawn_surface(
@@ -133,9 +143,14 @@ pub fn setup_course(
     );
 
     let finish_center = finish_start + finish_rotation * Vec3::Z * 13.0 + Vec3::Y * 1.0;
-    commands.spawn(FinishRegion {
+    let finish_region = FinishRegion {
         center: finish_center,
         half_extents: Vec3::splat(4.0),
+    };
+    commands.spawn(finish_region);
+    commands.insert_resource(CourseRoute {
+        gates,
+        finish: Some(finish_region),
     });
     spawn_finish_gate(
         &mut commands,
@@ -148,6 +163,16 @@ pub fn setup_course(
     // Retain this endpoint calculation in the source to make the final apron
     // route explicit while avoiding an accidental visual-only course extension.
     let _course_end = finish_end;
+}
+
+fn progression_gate(center: Vec3, rotation: Quat) -> ProgressionGate {
+    ProgressionGate {
+        center: center + Vec3::Y,
+        forward: (rotation * Vec3::Z).with_y(0.0).normalize_or_zero(),
+        half_width: 5.0,
+        half_height: 4.0,
+        half_depth: 2.5,
+    }
 }
 
 fn spawn_surface(

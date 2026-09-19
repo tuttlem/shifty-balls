@@ -39,7 +39,7 @@ These milestones represent the current intended development path.
 * [x] Tune the response until influencing the ball is understandable.
 * [x] Build a small prototype course requiring deliberate mass shifting.
 * [x] Determine whether the core mechanic is genuinely enjoyable.
-* [ ] Only then introduce multiple racing balls.
+* [x] Only then introduce multiple racing balls.
 
 The first major gameplay target is:
 
@@ -638,19 +638,19 @@ Only introduce multiple racers once the single-ball mechanic is enjoyable.
 
 ## Basic Multiple-Ball Simulation
 
-* [ ] Spawn multiple balls.
-* [ ] Simulate them simultaneously.
-* [ ] Support ball-to-ball collision.
-* [ ] Maintain independent physical state.
-* [ ] Identify balls visually.
-* [ ] Maintain stable simulation with several balls.
+* [x] Spawn multiple balls.
+* [x] Simulate them simultaneously.
+* [x] Support ball-to-ball collision.
+* [x] Maintain independent physical state.
+* [x] Identify balls visually.
+* [x] Maintain stable simulation with several balls.
 
 ## Collision Gameplay
 
-* [ ] Balls can bump one another.
+* [x] Balls can bump one another.
 * [ ] Collisions transfer momentum.
 * [ ] Players can be knocked higher or lower on banks.
-* [ ] Collisions can disrupt racing lines.
+* [x] Collisions can disrupt racing lines.
 * [ ] Players can recover from collisions.
 * [ ] Positioning before bottlenecks matters.
 * [ ] Heavier/faster impacts feel meaningfully different.
@@ -696,13 +696,13 @@ Differences should create distinct physical handling rather than simple statisti
 
 Balls need to remain readable during crowded races.
 
-* [ ] Distinct player colours/materials.
-* [ ] Clear player marker where useful.
+* [x] Distinct player colours/materials.
+* [x] Clear player marker where useful.
 * [ ] Readable orientation if orientation matters.
-* [ ] Visual indication of internal mass during development.
+* [x] Visual indication of internal mass during development.
 * [ ] Decide whether internal mass remains visible in final presentation.
-* [ ] Distinguish local player from opponents.
-* [ ] Preserve readability during collisions.
+* [x] Distinguish local player from opponents.
+* [x] Preserve readability during collisions.
 
 Potential visual concepts:
 
@@ -722,29 +722,29 @@ Once multiple balls exist, establish actual racing rules.
 
 ## Basic Race
 
-* [ ] Starting grid/positions.
-* [ ] Countdown.
-* [ ] Race start.
-* [ ] Track progression.
-* [ ] Checkpoints.
-* [ ] Finish detection.
-* [ ] Finishing order.
-* [ ] Race results.
-* [ ] Restart/rematch.
+* [x] Starting grid/positions.
+* [x] Countdown.
+* [x] Race start.
+* [x] Track progression.
+* [x] Checkpoints.
+* [x] Finish detection.
+* [x] Finishing order.
+* [x] Race results.
+* [x] Restart/rematch.
 
 ## Position Tracking
 
-* [ ] Determine progress through track.
+* [x] Determine progress through track.
 * [ ] Handle alternate routes.
-* [ ] Handle players temporarily travelling backwards.
+* [x] Handle players temporarily travelling backwards.
 * [ ] Handle falls/resets.
-* [ ] Display race position accurately.
+* [x] Display race position accurately.
 
 ## Race Formats
 
 Potential later formats:
 
-* [ ] Point-to-point downhill race.
+* [x] Point-to-point downhill race.
 * [ ] Multi-lap circuit.
 * [ ] Elimination.
 * [ ] Time trial.
@@ -763,10 +763,10 @@ Race starts could become a small skill opportunity.
 
 Potential approaches:
 
-* [ ] All balls released simultaneously.
+* [x] All balls released simultaneously.
 * [ ] Player controls initial internal-mass position.
 * [ ] Player influences launch timing.
-* [ ] Gravity-only release.
+* [x] Gravity-only release.
 * [ ] Starting gate.
 * [ ] Initial push/throw mechanic.
 
@@ -782,10 +782,10 @@ It should not cheat by directly steering its ball.
 
 ## Basic AI
 
-* [ ] Observe track direction.
-* [ ] Determine desired physical line.
-* [ ] Manipulate internal mass.
-* [ ] Navigate basic track geometry.
+* [x] Observe track direction.
+* [x] Determine desired physical line.
+* [x] Manipulate internal mass.
+* [x] Navigate basic track geometry.
 * [ ] Recover from mistakes.
 * [ ] Complete a race.
 
@@ -1537,14 +1537,14 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone E — First Race
 
-* [ ] Multiple balls exist.
-* [ ] Ball-to-ball collisions work.
-* [ ] Starting sequence exists.
-* [ ] Track progression works.
-* [ ] Finish detection works.
-* [ ] Race positions work.
-* [ ] AI or another local player can race.
-* [ ] A complete race can be won.
+* [x] Multiple balls exist.
+* [x] Ball-to-ball collisions work.
+* [x] Starting sequence exists.
+* [x] Track progression works.
+* [x] Finish detection works.
+* [x] Race positions work.
+* [x] AI or another local player can race.
+* [x] A complete race can be won.
 
 **At this point Shifty Balls is a racing game.**
 

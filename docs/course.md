@@ -1,9 +1,8 @@
 # First Course Kill Test
 
 This is one compact, hand-authored physical course, not the beginning of a
-track system or a racing mode. Its purpose is to answer whether Shifty Balls is
-worth another run because the player understands where their mass position will
-take them next.
+track system. It first established whether Shifty Balls was worth another run;
+it now also hosts the deliberately small first-race traffic experiment.
 
 ## Layout intent
 
@@ -30,12 +29,12 @@ confusing the result with airborne behaviour or adding mid-air steering.
 | Input | Behaviour |
 |---|---|
 | W/A/S/D | Shift the existing internal mass in world-relative directions |
-| R | Restore the ball, motion, mass position, camera, and active timer to the course start; retain session best |
+| R | Reset every racer, motion, mass position, camera, and race state to a fresh countdown |
 | F3 | Toggle the development readout and mass/velocity display |
 
-The readout shows current or completed time, session-best completed time, and
-speed. It is development tooling only: there are no laps, checkpoints, race
-positions, persistent records, or leaderboard.
+The first-race display now shows countdown, position, and current time. It
+remains deliberately small: there are no laps, persistent records, or
+leaderboard.
 
 ## Tuning and camera
 

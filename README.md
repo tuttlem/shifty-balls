@@ -3,11 +3,11 @@
 Shifty Balls is a 3D physics-driven racing game prototype. The eventual player control mechanic
 will influence a rolling ball by shifting its internal mass rather than steering it like a vehicle.
 
-The project has completed its first-course kill test: one ball rolls through a compact,
-hand-authored course while the player moves a visible conceptual weight inside it. The weight
-changes the ball's centre of mass; gravity and collision contact, not vehicle steering, determine
-the response. The initial result is promising, although the first course is currently too difficult
-to serve as a gentle introduction. There is no race system or production track yet.
+The project is now at its first-race vertical slice: one human ball and three physical AI balls
+share a compact, hand-authored course. Every racer moves by shifting an internal mass; gravity and
+collision contact, not vehicle steering, determine the response. The initial single-ball result
+was promising, although the course remains demanding and first-race traffic observations are still
+awaiting playtest.
 
 ## Prerequisites
 
@@ -27,9 +27,10 @@ cargo build
 cargo run
 ```
 
-The application window is titled **Shifty Balls**. It shows one ball, a compact course with bends,
-banks, a crest, and a finish gate, plus a development display for mass state, speed, and timing.
-Gravity and rigid-body contact move the ball; closing the window exits normally.
+The application window is titled **Shifty Balls**. It stages four distinct balls, counts down,
+then releases them through a compact course with bends, banks, a crest, progression regions, and a
+finish gate. The race display shows countdown, player position, and time; gravity and rigid-body
+contact move every ball.
 
 ## Temporary Experiment Controls
 
@@ -38,13 +39,14 @@ Gravity and rigid-body contact move the ball; closing the window exits normally.
 - `A`: shift it track-left (-X)
 - `D`: shift it track-right (+X)
 - Combined keys request a normalised diagonal; releasing every key returns the target to centre.
-- `R`: immediately restart the current course attempt while retaining the session-best time.
-- `F3`: toggle the development mass, velocity, and timing display.
+- `R`: reset every racer and begin a fresh race countdown.
+- `F3`: toggle the human-only development mass and velocity display.
 
 The control model is experimental. It does not set velocity, turn the ball, or apply steering
 forces. See [the mass-shift experiment](docs/mass-shift.md) for the current approximation,
 tuning values, display legend, and trial procedure. See [the first course](docs/course.md) for the
-kill-test layout, timing, and observation record.
+kill-test layout, timing, and observation record, and [the first race](docs/race.md) for the race
+lifecycle, progression model, and current traffic observations.
 
 ## Validate
 
@@ -69,6 +71,7 @@ until automation provides demonstrated value.
 - Initial physics decision and world conventions: [docs/physics.md](docs/physics.md)
 - Current internal-mass experiment: [docs/mass-shift.md](docs/mass-shift.md)
 - First-course kill test: [docs/course.md](docs/course.md)
+- First-race vertical slice: [docs/race.md](docs/race.md)
 
-The next decision comes from the course playtest: improve the control model if it is weak, rather
-than adding racing content to compensate.
+The next decision comes from repeated physical races: improve traffic, control, or course evidence
+if it is weak, rather than adding racing content to compensate.

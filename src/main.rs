@@ -1,8 +1,9 @@
-mod attempt;
+mod ai;
 mod camera;
 mod course;
 mod mass_shift;
 mod physics;
+mod race;
 mod scene;
 
 use avian3d::prelude::PhysicsSystems;
@@ -21,30 +22,34 @@ fn main() {
     }));
     physics::configure(&mut app);
     app.init_resource::<mass_shift::MassShiftTuning>()
-        .init_resource::<mass_shift::InternalMassState>()
-        .init_resource::<attempt::AttemptState>()
-        .init_resource::<attempt::DevelopmentDisplay>();
+        .init_resource::<race::RaceState>()
+        .init_resource::<race::DevelopmentDisplay>();
     app.add_systems(
         Startup,
         (
             scene::setup_scene,
             course::setup_course,
             camera::setup_camera,
-            attempt::setup_readout,
+            race::setup_readout,
         ),
     )
     .add_systems(
         Update,
         (
-            mass_shift::read_keyboard_intent,
-            mass_shift::advance_internal_mass.after(mass_shift::read_keyboard_intent),
-            attempt::handle_restart.after(mass_shift::advance_internal_mass),
-            attempt::check_finish.after(attempt::handle_restart),
-            attempt::tick_attempt.after(attempt::check_finish),
-            attempt::toggle_development_display.after(attempt::tick_attempt),
-            scene::draw_mass_shift_display.after(attempt::toggle_development_display),
-            attempt::update_readout.after(attempt::toggle_development_display),
-            camera::follow_ball.after(attempt::handle_restart),
+            race::handle_rematch,
+            race::tick_race.after(race::handle_rematch),
+            race::release_racers.after(race::tick_race),
+            mass_shift::read_keyboard_intent.after(race::release_racers),
+            ai::set_ai_mass_intent.after(race::release_racers),
+            mass_shift::advance_internal_mass
+                .after(mass_shift::read_keyboard_intent)
+                .after(ai::set_ai_mass_intent),
+            race::update_progress.after(mass_shift::advance_internal_mass),
+            race::check_finishes.after(race::update_progress),
+            race::toggle_development_display.after(race::check_finishes),
+            scene::draw_mass_shift_display.after(race::toggle_development_display),
+            race::update_readout.after(race::check_finishes),
+            camera::follow_ball.after(race::handle_rematch),
         ),
     )
     .add_systems(

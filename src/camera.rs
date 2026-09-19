@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 
-use crate::physics::{ObservationCamera, PlayerBall, course_start_transform};
+use crate::physics::{HumanRacer, ObservationCamera};
 
 const CAMERA_OFFSET: Vec3 = Vec3::new(0.0, 6.0, -10.0);
 const LOOK_AHEAD: Vec3 = Vec3::new(0.0, 0.8, 7.0);
@@ -12,12 +12,12 @@ pub fn setup_camera(mut commands: Commands) {
     commands.spawn((
         ObservationCamera,
         Camera3d::default(),
-        course_camera_transform(course_start_transform().translation),
+        course_camera_transform(Vec3::new(0.0, 5.5, -18.0)),
     ));
 }
 
-pub fn snap_to_course_start(camera: &mut Transform) {
-    *camera = course_camera_transform(course_start_transform().translation);
+pub fn snap_to_human_position(camera: &mut Transform, position: Vec3) {
+    *camera = course_camera_transform(position);
 }
 
 fn course_camera_transform(ball_position: Vec3) -> Transform {
@@ -27,8 +27,8 @@ fn course_camera_transform(ball_position: Vec3) -> Transform {
 
 pub fn follow_ball(
     time: Res<Time>,
-    ball: Single<&Transform, With<PlayerBall>>,
-    mut camera: Single<&mut Transform, (With<ObservationCamera>, Without<PlayerBall>)>,
+    ball: Single<&Transform, With<HumanRacer>>,
+    mut camera: Single<&mut Transform, (With<ObservationCamera>, Without<HumanRacer>)>,
 ) {
     let desired_position = ball.translation + CAMERA_OFFSET;
     let smoothing = 1.0 - (-FOLLOW_RATE * time.delta_secs()).exp();

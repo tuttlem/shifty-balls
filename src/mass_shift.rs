@@ -8,9 +8,11 @@ use avian3d::prelude::{CenterOfMass, Rotation, WakeBody};
 use bevy::prelude::*;
 
 use crate::physics::{
-    BALL_MASS_KILOGRAMS, BALL_SHELL_MASS_KILOGRAMS, INTERNAL_MASS_DISPLACEMENT_RADIUS_METRES,
-    INTERNAL_MASS_KILOGRAMS, INTERNAL_MASS_MOVEMENT_SPEED_METRES_PER_SECOND, PlayerBall,
+    BALL_MASS_KILOGRAMS, BALL_SHELL_MASS_KILOGRAMS, HumanRacer,
+    INTERNAL_MASS_DISPLACEMENT_RADIUS_METRES, INTERNAL_MASS_KILOGRAMS,
+    INTERNAL_MASS_MOVEMENT_SPEED_METRES_PER_SECOND, Racer,
 };
+use crate::race::RaceState;
 
 /// Deliberately centralised prototype values, kept as a resource rather than a
 /// configuration framework so the first control experiment remains quick to tune.
@@ -50,7 +52,7 @@ impl MassShiftTuning {
 
 /// Project-owned state for the conceptual mass. Both positions are world
 /// horizontal offsets from the ball centre, never ball-local directions.
-#[derive(Resource, Debug, Default)]
+#[derive(Component, Debug, Default)]
 pub struct InternalMassState {
     pub requested_world: Vec3,
     pub current_world: Vec3,
@@ -99,8 +101,14 @@ pub fn com_world_to_local(com_world: Vec3, body_rotation: Quat) -> Vec3 {
 pub fn read_keyboard_intent(
     keys: Res<ButtonInput<KeyCode>>,
     tuning: Res<MassShiftTuning>,
-    mut state: ResMut<InternalMassState>,
+    race: Res<RaceState>,
+    mut state: Single<&mut InternalMassState, With<HumanRacer>>,
 ) {
+    if !race.is_racing() {
+        state.requested_world = Vec3::ZERO;
+        return;
+    }
+
     let direction = input_direction(
         keys.pressed(KeyCode::KeyW),
         keys.pressed(KeyCode::KeyA),
@@ -119,13 +127,22 @@ pub fn read_keyboard_intent(
 pub fn advance_internal_mass(
     time: Res<Time>,
     tuning: Res<MassShiftTuning>,
-    mut state: ResMut<InternalMassState>,
+    race: Res<RaceState>,
+    mut states: Query<&mut InternalMassState, With<Racer>>,
 ) {
-    let maximum_distance = tuning.movement_speed_metres_per_second * time.delta_secs();
-    state.current_world = clamp_to_horizontal_disk(
-        move_toward(state.current_world, state.requested_world, maximum_distance),
-        tuning.displacement_radius_metres,
-    );
+    for mut state in &mut states {
+        if !race.is_racing() {
+            state.requested_world = Vec3::ZERO;
+            state.current_world = Vec3::ZERO;
+            continue;
+        }
+
+        let maximum_distance = tuning.movement_speed_metres_per_second * time.delta_secs();
+        state.current_world = clamp_to_horizontal_disk(
+            move_toward(state.current_world, state.requested_world, maximum_distance),
+            tuning.displacement_radius_metres,
+        );
+    }
 }
 
 /// The sole gameplay-to-physics coupling. This intentionally does not touch
@@ -133,22 +150,21 @@ pub fn advance_internal_mass(
 /// gravity and contact solver produce the ball's response after this update.
 pub fn apply_center_of_mass(
     mut commands: Commands,
-    state: Res<InternalMassState>,
     tuning: Res<MassShiftTuning>,
-    ball: Single<(Entity, &Rotation, &mut CenterOfMass), With<PlayerBall>>,
+    mut racers: Query<(Entity, &Rotation, &InternalMassState, &mut CenterOfMass), With<Racer>>,
 ) {
-    let (entity, rotation, mut center_of_mass) = ball.into_inner();
-    let world_offset = combined_com_world(state.current_world, *tuning);
-    let local_offset = com_world_to_local(world_offset, **rotation);
-    **center_of_mass = local_offset;
+    for (entity, rotation, state, mut center_of_mass) in &mut racers {
+        let world_offset = combined_com_world(state.current_world, *tuning);
+        let local_offset = com_world_to_local(world_offset, **rotation);
+        **center_of_mass = local_offset;
 
-    // Avian does not treat a changed centre of mass as an automatic wake
-    // condition. Without this, the resting ball can sleep on the level start
-    // deck and ignore a player-visible weight shift indefinitely. Waking the
-    // body is not a movement force: contact and gravity still create all
-    // resulting motion.
-    if world_offset != Vec3::ZERO {
-        commands.queue(WakeBody(entity));
+        // Avian does not treat a changed centre of mass as an automatic wake
+        // condition. Without this, a resting racer can ignore a player-visible
+        // weight shift indefinitely. Waking is not a movement force: contact
+        // and gravity still create every resulting motion.
+        if world_offset != Vec3::ZERO {
+            commands.queue(WakeBody(entity));
+        }
     }
 }
 

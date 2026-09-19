@@ -10,11 +10,11 @@ change.
 
 ## Selected approximation
 
-The existing one-kilogram Avian rigid body remains the only ball body and
-collider. A project-owned conceptual inner mass changes that body's Avian
+Each racer uses the same one-kilogram Avian rigid body and collider. A
+project-owned conceptual inner mass changes that racer's Avian
 `CenterOfMass` component immediately before Avian prepares the fixed physics
 step. The resulting gravity and contact constraints determine the ball's
-movement.
+movement. Human and AI controllers both use this same path.
 
 This is the smallest useful initial model: it is stable, uses the selected
 physics library directly, and exposes a meaningful physical state without a
