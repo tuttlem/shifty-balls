@@ -4,7 +4,7 @@
 //! coupling to the rolling shell is Avian's local [`CenterOfMass`] property;
 //! gravity and contact decide every resulting movement.
 
-use avian3d::prelude::{CenterOfMass, Rotation};
+use avian3d::prelude::{CenterOfMass, Rotation, WakeBody};
 use bevy::prelude::*;
 
 use crate::physics::{
@@ -132,14 +132,24 @@ pub fn advance_internal_mass(
 /// velocities, orientation, forces, torques, impulses, or traction: Avian's
 /// gravity and contact solver produce the ball's response after this update.
 pub fn apply_center_of_mass(
+    mut commands: Commands,
     state: Res<InternalMassState>,
     tuning: Res<MassShiftTuning>,
-    ball: Single<(&Rotation, &mut CenterOfMass), With<PlayerBall>>,
+    ball: Single<(Entity, &Rotation, &mut CenterOfMass), With<PlayerBall>>,
 ) {
-    let (rotation, mut center_of_mass) = ball.into_inner();
+    let (entity, rotation, mut center_of_mass) = ball.into_inner();
     let world_offset = combined_com_world(state.current_world, *tuning);
     let local_offset = com_world_to_local(world_offset, **rotation);
     **center_of_mass = local_offset;
+
+    // Avian does not treat a changed centre of mass as an automatic wake
+    // condition. Without this, the resting ball can sleep on the level start
+    // deck and ignore a player-visible weight shift indefinitely. Waking the
+    // body is not a movement force: contact and gravity still create all
+    // resulting motion.
+    if world_offset != Vec3::ZERO {
+        commands.queue(WakeBody(entity));
+    }
 }
 
 #[cfg(test)]

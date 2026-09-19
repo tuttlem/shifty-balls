@@ -37,8 +37,8 @@ These milestones represent the current intended development path.
 * [x] Allow player input to shift the internal mass.
 * [x] Produce an observable physical response from shifting the mass.
 * [x] Tune the response until influencing the ball is understandable.
-* [ ] Build a small prototype course requiring deliberate mass shifting.
-* [ ] Determine whether the core mechanic is genuinely enjoyable.
+* [x] Build a small prototype course requiring deliberate mass shifting.
+* [x] Determine whether the core mechanic is genuinely enjoyable.
 * [ ] Only then introduce multiple racing balls.
 
 The first major gameplay target is:
@@ -313,12 +313,12 @@ Create a deliberately small prototype environment that requires the player to in
 
 Potential elements:
 
-* [ ] Straight downhill section.
-* [ ] Gentle bank.
-* [ ] Strong bank.
-* [ ] Direction change.
+* [x] Straight downhill section.
+* [x] Gentle bank.
+* [x] Strong bank.
+* [x] Direction change.
 * [ ] Small half-pipe.
-* [ ] Rise requiring momentum.
+* [x] Rise requiring momentum.
 * [ ] Drop.
 * [ ] Small jump.
 * [ ] Recovery after poor positioning.
@@ -364,7 +364,7 @@ The camera is particularly important because the player must understand speed, s
 
 Investigate:
 
-* [ ] World-relative horizon.
+* [x] World-relative horizon.
 * [ ] Track-relative horizon.
 * [ ] Velocity-relative orientation.
 * [ ] Hybrid orientation.
@@ -394,19 +394,19 @@ Tracks should exploit rolling-ball physics rather than resemble ordinary roads.
 
 ## Basic Track Elements
 
-* [ ] Straight downhill section.
-* [ ] Gentle curve.
-* [ ] Banked curve.
+* [x] Straight downhill section.
+* [x] Gentle curve.
+* [x] Banked curve.
 * [ ] Half-pipe.
 * [ ] Bowl.
 * [ ] Funnel.
 * [ ] Ramp.
 * [ ] Jump.
 * [ ] Drop.
-* [ ] Crest.
-* [ ] Compression.
+* [x] Crest.
+* [x] Compression.
 * [ ] Narrow channel.
-* [ ] Wide open section.
+* [x] Wide open section.
 * [ ] Wall ride.
 * [ ] Corkscrew.
 * [ ] Loop only if physics and camera make it enjoyable.
@@ -437,14 +437,14 @@ Do not build a sophisticated track editor prematurely.
 
 ## Initial Representation
 
-* [ ] Establish a simple way to construct prototype tracks.
-* [ ] Support connected track sections.
-* [ ] Ensure collision geometry matches rendered geometry sufficiently.
-* [ ] Support banked and curved surfaces.
+* [x] Establish a simple way to construct prototype tracks.
+* [x] Support connected track sections.
+* [x] Ensure collision geometry matches rendered geometry sufficiently.
+* [x] Support banked and curved surfaces.
 * [ ] Support broad half-pipe-style geometry.
-* [ ] Establish start position.
-* [ ] Establish finish region.
-* [ ] Establish track bounds where appropriate.
+* [x] Establish start position.
+* [x] Establish finish region.
+* [x] Establish track bounds where appropriate.
 
 ## Later Track Construction
 
@@ -1277,12 +1277,12 @@ Potential tools:
 * [ ] collider visualisation.
 * [x] centre-of-mass visualisation.
 * [x] internal-mass position visualisation.
-* [ ] velocity vector.
+* [x] velocity vector.
 * [ ] angular velocity.
 * [ ] contact points.
 * [ ] friction state.
 * [ ] current surface.
-* [ ] speed.
+* [x] speed.
 * [ ] physics timestep.
 * [ ] camera target.
 * [ ] checkpoint state.
@@ -1524,8 +1524,8 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone D — First Course
 
-* [ ] Small prototype course exists.
-* [ ] Course includes meaningful banks/curves.
+* [x] Small prototype course exists.
+* [x] Course includes meaningful banks/curves.
 * [ ] Momentum matters.
 * [ ] Player can improve through practice.
 * [ ] Mistakes have understandable consequences.

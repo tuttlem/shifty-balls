@@ -2,18 +2,27 @@
 
 use bevy::prelude::*;
 
-use crate::physics::{ObservationCamera, PlayerBall};
+use crate::physics::{ObservationCamera, PlayerBall, course_start_transform};
 
-const CAMERA_OFFSET: Vec3 = Vec3::new(7.0, 5.0, -9.0);
-const LOOK_AHEAD: Vec3 = Vec3::new(0.0, 0.0, 4.0);
+const CAMERA_OFFSET: Vec3 = Vec3::new(0.0, 6.0, -10.0);
+const LOOK_AHEAD: Vec3 = Vec3::new(0.0, 0.8, 7.0);
 const FOLLOW_RATE: f32 = 5.0;
 
 pub fn setup_camera(mut commands: Commands) {
     commands.spawn((
         ObservationCamera,
         Camera3d::default(),
-        Transform::from_translation(CAMERA_OFFSET).looking_at(LOOK_AHEAD, Vec3::Y),
+        course_camera_transform(course_start_transform().translation),
     ));
+}
+
+pub fn snap_to_course_start(camera: &mut Transform) {
+    *camera = course_camera_transform(course_start_transform().translation);
+}
+
+fn course_camera_transform(ball_position: Vec3) -> Transform {
+    Transform::from_translation(ball_position + CAMERA_OFFSET)
+        .looking_at(ball_position + LOOK_AHEAD, Vec3::Y)
 }
 
 pub fn follow_ball(
