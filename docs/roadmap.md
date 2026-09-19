@@ -24,10 +24,10 @@ Completed work should be checked off only when its acceptance criteria have genu
 
 These milestones represent the current intended development path.
 
-* [ ] Establish the Rust/Bevy project foundation.
-* [ ] Open a Bevy game window.
-* [ ] Render a minimal 3D scene.
-* [ ] Render a sphere representing the player ball.
+* [x] Establish the Rust/Bevy project foundation.
+* [x] Open a Bevy game window.
+* [x] Render a minimal 3D scene.
+* [x] Render a sphere representing the player ball.
 * [ ] Select an appropriate initial rigid-body physics approach.
 * [ ] Place the ball under gravity.
 * [ ] Create a simple slope or half-pipe.
@@ -55,26 +55,26 @@ Do not bury it beneath racing infrastructure.
 
 ## Repository and Workspace
 
-* [ ] Establish Shifty Balls as a Rust Cargo project/workspace.
-* [ ] Establish the minimum useful crate structure.
-* [ ] Keep workspace boundaries based on demonstrated needs.
-* [ ] Ensure the repository is easy to understand and navigate.
-* [ ] Add appropriate `.gitignore`.
-* [ ] Add a useful root `README.md`.
-* [ ] Document how to build and run the project.
-* [ ] Document how to run tests and quality checks.
-* [ ] Establish workspace-wide development commands where useful.
+* [x] Establish Shifty Balls as a Rust Cargo project/workspace.
+* [x] Establish the minimum useful crate structure.
+* [x] Keep workspace boundaries based on demonstrated needs.
+* [x] Ensure the repository is easy to understand and navigate.
+* [x] Add appropriate `.gitignore`.
+* [x] Add a useful root `README.md`.
+* [x] Document how to build and run the project.
+* [x] Document how to run tests and quality checks.
+* [x] Establish workspace-wide development commands where useful.
 
 ## Rust Tooling
 
-* [ ] Establish supported Rust toolchain policy.
-* [ ] Configure `rustfmt`.
-* [ ] Configure Clippy.
-* [ ] Establish workspace-wide build validation.
-* [ ] Establish workspace-wide test validation.
-* [ ] Establish workspace-wide lint validation.
-* [ ] Treat warnings intentionally rather than ignoring them.
-* [ ] Avoid unnecessary dependencies during foundation work.
+* [x] Establish supported Rust toolchain policy.
+* [x] Configure `rustfmt`.
+* [x] Configure Clippy.
+* [x] Establish workspace-wide build validation.
+* [x] Establish workspace-wide test validation.
+* [x] Establish workspace-wide lint validation.
+* [x] Treat warnings intentionally rather than ignoring them.
+* [x] Avoid unnecessary dependencies during foundation work.
 
 ## Bevy Bootstrap
 
@@ -82,39 +82,39 @@ Bevy is already the selected game technology.
 
 A separate engine-selection exercise is not required.
 
-* [ ] Add the appropriate Bevy dependency.
-* [ ] Establish the smallest useful Bevy application.
-* [ ] Open a desktop game window.
-* [ ] Configure an appropriate application/window title.
-* [ ] Establish a basic 3D scene.
-* [ ] Add a perspective camera.
-* [ ] Add basic lighting.
-* [ ] Render a ground/reference surface.
-* [ ] Render a sphere representing the future player ball.
-* [ ] Ensure the application exits cleanly.
-* [ ] Document how to launch the game.
+* [x] Add the appropriate Bevy dependency.
+* [x] Establish the smallest useful Bevy application.
+* [x] Open a desktop game window.
+* [x] Configure an appropriate application/window title.
+* [x] Establish a basic 3D scene.
+* [x] Add a perspective camera.
+* [x] Add basic lighting.
+* [x] Render a ground/reference surface.
+* [x] Render a sphere representing the future player ball.
+* [x] Ensure the application exits cleanly.
+* [x] Document how to launch the game.
 
 Do not introduce physics merely as part of the Bevy bootstrap unless required by a separate specification.
 
 ## Testing Foundation
 
-* [ ] Establish unit-testing conventions.
+* [x] Establish unit-testing conventions.
 * [ ] Establish integration-testing conventions where useful.
-* [ ] Establish deterministic testing patterns for pure gameplay calculations.
+* [x] Establish deterministic testing patterns for pure gameplay calculations.
 * [ ] Introduce shared testing infrastructure only when duplication demonstrates a need.
-* [ ] Establish the expectation that discovered gameplay bugs receive regression tests where practical.
+* [x] Establish the expectation that discovered gameplay bugs receive regression tests where practical.
 
 ## Documentation
 
-* [ ] Maintain `docs/roadmap.md`.
-* [ ] Maintain `docs/specs/`.
-* [ ] Preserve timestamp-based specification naming.
-* [ ] Document relevant developer workflow guidance.
-* [ ] Keep architectural documentation lightweight and current.
+* [x] Maintain `docs/roadmap.md`.
+* [x] Maintain `docs/specs/`.
+* [x] Preserve timestamp-based specification naming.
+* [x] Document relevant developer workflow guidance.
+* [x] Keep architectural documentation lightweight and current.
 
 ## Automation / CI
 
-* [ ] Decide whether CI currently provides sufficient value.
+* [x] Decide whether CI currently provides sufficient value.
 * [ ] Add automated build validation if justified.
 * [ ] Add automated tests if justified.
 * [ ] Add formatting validation if justified.
@@ -1487,15 +1487,15 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone A — Foundation
 
-* [ ] Rust project/workspace exists.
-* [ ] Bevy is integrated.
-* [ ] Game window opens.
-* [ ] Basic 3D scene renders.
-* [ ] Sphere renders.
-* [ ] Repository builds cleanly.
-* [ ] Tests and quality checks pass.
-* [ ] Documentation and roadmap exist.
-* [ ] SpecKit workflow is established.
+* [x] Rust project/workspace exists.
+* [x] Bevy is integrated.
+* [x] Game window opens.
+* [x] Basic 3D scene renders.
+* [x] Sphere renders.
+* [x] Repository builds cleanly.
+* [x] Tests and quality checks pass.
+* [x] Documentation and roadmap exist.
+* [x] SpecKit workflow is established.
 
 **At this point Shifty Balls is ready for gameplay experimentation.**
 
