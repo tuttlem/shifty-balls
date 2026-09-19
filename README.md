@@ -3,9 +3,10 @@
 Shifty Balls is a 3D physics-driven racing game prototype. The eventual player control mechanic
 will influence a rolling ball by shifting its internal mass rather than steering it like a vehicle.
 
-The project is currently at its first physics experiment: one uncontrolled ball rolls down a
-primitive static test track under gravity. There is no player input, steering, internal-mass
-mechanic, race system, or production track yet.
+The project is currently at its first internal-mass experiment: one ball rolls down a primitive
+test track under gravity while the player can move a visible conceptual weight inside it. The
+weight changes the ball's centre of mass; gravity and collision contact, not vehicle steering,
+determine the response. There is no race system or production track yet.
 
 ## Prerequisites
 
@@ -26,8 +27,21 @@ cargo run
 ```
 
 The application window is titled **Shifty Balls**. It shows one marked ball, primitive slope and
-run-out geometry, and a simple follow view. Gravity and rigid-body contact move the ball; closing
+run-out geometry, a simple follow view, and a development display for the centre, current weight,
+requested weight, and displacement limit. Gravity and rigid-body contact move the ball; closing
 the window exits normally.
+
+## Temporary Experiment Controls
+
+- `W`: shift the internal mass down-track (+Z)
+- `S`: shift it up-track (-Z)
+- `A`: shift it track-left (-X)
+- `D`: shift it track-right (+X)
+- Combined keys request a normalised diagonal; releasing every key returns the target to centre.
+
+The control model is experimental. It does not set velocity, turn the ball, or apply steering
+forces. See [the mass-shift experiment](docs/mass-shift.md) for the current approximation,
+tuning values, display legend, and trial procedure.
 
 ## Validate
 
@@ -50,6 +64,7 @@ until automation provides demonstrated value.
 - Long-lived backlog: [docs/roadmap.md](docs/roadmap.md)
 - Feature specifications: [docs/specs](docs/specs)
 - Initial physics decision and world conventions: [docs/physics.md](docs/physics.md)
+- Current internal-mass experiment: [docs/mass-shift.md](docs/mass-shift.md)
 
 The next gameplay experiment will investigate the internal movable-mass / centre-of-mass control
 model without reducing it to conventional steering.

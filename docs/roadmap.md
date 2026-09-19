@@ -33,10 +33,10 @@ These milestones represent the current intended development path.
 * [x] Create a simple slope or half-pipe.
 * [x] Allow the ball to roll freely through physical simulation.
 * [x] Establish useful follow-camera behaviour.
-* [ ] Implement an initial internal movable mass / centre-of-mass model.
-* [ ] Allow player input to shift the internal mass.
-* [ ] Produce an observable physical response from shifting the mass.
-* [ ] Tune the response until influencing the ball is understandable.
+* [x] Implement an initial internal movable mass / centre-of-mass model.
+* [x] Allow player input to shift the internal mass.
+* [x] Produce an observable physical response from shifting the mass.
+* [x] Tune the response until influencing the ball is understandable.
 * [ ] Build a small prototype course requiring deliberate mass shifting.
 * [ ] Determine whether the core mechanic is genuinely enjoyable.
 * [ ] Only then introduce multiple racing balls.
@@ -144,7 +144,7 @@ The objective is sufficiently robust rigid-body behaviour that makes rolling, ba
 * [x] Support angular velocity and rotational motion.
 * [x] Support impulses/forces where required.
 * [x] Determine how an offset centre of mass can be represented.
-* [ ] Determine whether compound colliders or equivalent mechanisms are useful.
+* [x] Determine whether compound colliders or equivalent mechanisms are useful.
 * [x] Determine whether runtime mass-property modification is practical.
 * [x] Consider physics debugging/visualisation support.
 * [x] Consider Bevy integration quality.
@@ -154,7 +154,7 @@ The objective is sufficiently robust rigid-body behaviour that makes rolling, ba
 
 * [x] Evaluate suitable Bevy-compatible physics libraries.
 * [x] Evaluate whether an existing physics library provides the required mass-property behaviour.
-* [ ] Evaluate whether any small amount of custom physical modelling is required for the internal-mass mechanic.
+* [x] Evaluate whether any small amount of custom physical modelling is required for the internal-mass mechanic.
 * [x] Avoid implementing a general-purpose physics engine.
 * [x] Record the selected approach and reasoning.
 
@@ -175,7 +175,7 @@ Establish a consistent world model before track and movement systems become comp
 * [x] Define velocity units.
 * [x] Define angular conventions where relevant.
 * [x] Define gravity direction and magnitude conventions.
-* [ ] Define track-local versus world-space concepts where useful.
+* [x] Define track-local versus world-space concepts where useful.
 * [x] Define ball radius conventions.
 * [x] Define reasonable world scale.
 * [x] Ensure rendering and physics agree about scale and orientation.
@@ -235,24 +235,24 @@ It should receive focused experimentation rather than being buried inside genera
 
 ## Conceptual Model
 
-* [ ] Represent an internal movable mass.
-* [ ] Define its relationship to the outer ball.
-* [ ] Define allowed movement range.
-* [ ] Define how quickly the mass can move.
-* [ ] Define whether movement is continuous or constrained.
-* [ ] Define whether the mass has meaningful inertia.
-* [ ] Determine how the shifted mass changes the ball's physical behaviour.
-* [ ] Keep the relationship understandable to the player.
+* [x] Represent an internal movable mass.
+* [x] Define its relationship to the outer ball.
+* [x] Define allowed movement range.
+* [x] Define how quickly the mass can move.
+* [x] Define whether movement is continuous or constrained.
+* [x] Define whether the mass has meaningful inertia.
+* [x] Determine how the shifted mass changes the ball's physical behaviour.
+* [x] Keep the relationship understandable to the player.
 
 ## Centre-of-Mass Behaviour
 
 Investigate approaches such as:
 
-* [ ] Runtime centre-of-mass offset.
+* [x] Runtime centre-of-mass offset.
 * [ ] Compound rigid body with internal mass representation.
 * [ ] Physically modelled internal body/constraint.
 * [ ] Controlled torque resulting from mass displacement.
-* [ ] Simplified gameplay approximation preserving understandable physical causality.
+* [x] Simplified gameplay approximation preserving understandable physical causality.
 
 The implementation does not need to be physically exact.
 
@@ -270,29 +270,29 @@ Player control should influence physics rather than directly command movement.
 
 ## Basic Input
 
-* [ ] Read directional player input.
-* [ ] Map input into desired internal-mass displacement.
-* [ ] Visualise current mass displacement during development.
-* [ ] Clamp displacement to allowed physical range.
-* [ ] Return or transition the mass appropriately when input changes.
+* [x] Read directional player input.
+* [x] Map input into desired internal-mass displacement.
+* [x] Visualise current mass displacement during development.
+* [x] Clamp displacement to allowed physical range.
+* [x] Return or transition the mass appropriately when input changes.
 * [ ] Tune input responsiveness.
 
 ## Control Behaviour
 
-* [ ] Shift mass forward/backward.
-* [ ] Shift mass left/right.
-* [ ] Support combined directional displacement.
+* [x] Shift mass forward/backward.
+* [x] Shift mass left/right.
+* [x] Support combined directional displacement.
 * [ ] Evaluate whether vertical/internal radial movement is useful.
 * [ ] Evaluate whether control should be camera-relative.
 * [ ] Evaluate whether control should be ball-relative.
 * [ ] Evaluate whether control should be track-relative.
-* [ ] Ensure control remains understandable while the ball rotates.
+* [x] Ensure control remains understandable while the ball rotates.
 
 ## Input Devices
 
 Initially:
 
-* [ ] Keyboard support.
+* [x] Keyboard support.
 * [ ] Mouse only where genuinely useful.
 
 Later:
@@ -1275,8 +1275,8 @@ Introduce debugging facilities when they directly aid gameplay development.
 Potential tools:
 
 * [ ] collider visualisation.
-* [ ] centre-of-mass visualisation.
-* [ ] internal-mass position visualisation.
+* [x] centre-of-mass visualisation.
+* [x] internal-mass position visualisation.
 * [ ] velocity vector.
 * [ ] angular velocity.
 * [ ] contact points.
@@ -1300,16 +1300,16 @@ Potential tuneables:
 * [ ] gravity.
 * [ ] ball mass.
 * [ ] ball radius.
-* [ ] internal-mass ratio.
-* [ ] internal-mass movement speed.
-* [ ] maximum mass offset.
+* [x] internal-mass ratio.
+* [x] internal-mass movement speed.
+* [x] maximum mass offset.
 * [ ] shell friction.
 * [ ] restitution.
 * [ ] damping.
 * [ ] rotational behaviour.
 * [ ] surface friction.
 * [ ] camera smoothing.
-* [ ] control response.
+* [x] control response.
 
 Do not prematurely build a generic configuration system.
 
@@ -1513,12 +1513,12 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone C — First Shift
 
-* [ ] Internal mass exists conceptually and technically.
-* [ ] Player can move internal mass.
-* [ ] Centre-of-mass change affects physical behaviour.
-* [ ] Player can intentionally influence the ball's path.
-* [ ] Control response is understandable.
-* [ ] Debug visualisation explains what the internal mass is doing.
+* [x] Internal mass exists conceptually and technically.
+* [x] Player can move internal mass.
+* [x] Centre-of-mass change affects physical behaviour.
+* [x] Player can intentionally influence the ball's path.
+* [x] Control response is understandable.
+* [x] Debug visualisation explains what the internal mass is doing.
 
 **At this point we discover whether the central idea works.**
 

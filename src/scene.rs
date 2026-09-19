@@ -3,6 +3,7 @@
 use avian3d::prelude::*;
 use bevy::prelude::*;
 
+use crate::mass_shift::{InternalMassState, MassShiftTuning};
 use crate::physics::{
     BALL_FRICTION, BALL_MASS_KILOGRAMS, BALL_RADIUS_METRES, BALL_RESTITUTION, BALL_START_POSITION,
     PhysicsTestTrack, PlayerBall, SLOPE_ANGLE_RADIANS, SLOPE_CENTER, TRACK_FRICTION,
@@ -86,6 +87,9 @@ pub fn setup_scene(
             RigidBody::Dynamic,
             Collider::sphere(BALL_RADIUS_METRES),
             Mass(BALL_MASS_KILOGRAMS),
+            // The mass-shift experiment updates this explicit local property
+            // before physics preparation; ZERO is the neutral starting balance.
+            CenterOfMass::ZERO,
             Friction::new(BALL_FRICTION),
             Restitution::new(BALL_RESTITUTION),
             TransformInterpolation,
@@ -104,6 +108,40 @@ pub fn setup_scene(
             Transform::from_xyz(0.0, BALL_RADIUS_METRES, 0.0),
         ));
     });
+}
+
+/// Draws an intentionally plain, world-stable explanation of the experimental
+/// mass state. These gizmos are not children of the rolling mesh, so the
+/// player's directions do not become visually scrambled by shell rotation.
+pub fn draw_mass_shift_display(
+    mut gizmos: Gizmos,
+    ball: Single<&Transform, With<PlayerBall>>,
+    state: Res<InternalMassState>,
+    tuning: Res<MassShiftTuning>,
+) {
+    let centre = ball.translation;
+    let current = centre + state.current_world;
+    let target = centre + state.requested_world;
+    let boundary_rotation = Quat::from_rotation_x(std::f32::consts::FRAC_PI_2);
+
+    gizmos.sphere(Isometry3d::new(centre, Quat::IDENTITY), 0.055, Color::WHITE);
+    gizmos.sphere(
+        Isometry3d::new(current, Quat::IDENTITY),
+        0.10,
+        Color::srgb(1.0, 0.15, 0.15),
+    );
+    gizmos.sphere(
+        Isometry3d::new(target, Quat::IDENTITY),
+        0.065,
+        Color::srgba(0.15, 0.95, 1.0, 0.55),
+    );
+    gizmos.circle(
+        Isometry3d::new(centre + Vec3::Y * 0.015, boundary_rotation),
+        tuning.displacement_radius_metres,
+        Color::srgb(0.3, 0.8, 1.0),
+    );
+    gizmos.line(centre, current, Color::srgb(1.0, 0.15, 0.15));
+    gizmos.line(centre, target, Color::srgba(0.15, 0.95, 1.0, 0.55));
 }
 
 fn spawn_track_piece(

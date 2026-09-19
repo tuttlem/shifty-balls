@@ -49,6 +49,9 @@ Avian can draw collision geometry, but normal cargo run stays clean and this
 prototype does not add a permanent debug overlay. The visible primitive track
 and a contrasting marker on the ball are enough to inspect the first experiment.
 
-The ball has no player input, steering, propulsion, force, impulse, movable
-internal mass, centre-of-mass control, additional ball, or race rule. Gravity
-and normal physical contact own its motion.
+The first internal-mass experiment keeps gravity and normal contact responsible
+for movement while a focused system updates Avian's local `CenterOfMass` before
+the fixed physics preparation phase. See [the mass-shift experiment](mass-shift.md)
+for its deliberately limited approximation, world-relative controls, tuning,
+and development display. It introduces no direct steering, propulsion, force,
+torque, impulse, additional ball, or race rule.
