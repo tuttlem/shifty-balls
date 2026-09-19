@@ -8,6 +8,7 @@
 use bevy::prelude::*;
 
 use crate::{
+    comparison::SessionMode,
     mass_shift::{InternalMassState, MassShiftTuning, clamp_to_horizontal_disk},
     physics::{AiRacer, CourseRoute},
     race::{RaceState, RacerProgress},
@@ -15,12 +16,13 @@ use crate::{
 
 pub fn set_ai_mass_intent(
     race: Res<RaceState>,
+    session: Res<SessionMode>,
     route: Res<CourseRoute>,
     tuning: Res<MassShiftTuning>,
     mut racers: Query<(&Transform, &RacerProgress, &mut InternalMassState), With<AiRacer>>,
 ) {
     for (transform, progress, mut mass) in &mut racers {
-        if !race.is_racing() {
+        if !session.is_race() || !race.is_racing() {
             mass.requested_world = Vec3::ZERO;
             continue;
         }

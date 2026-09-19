@@ -7,16 +7,17 @@
 use std::{cmp::Ordering, time::Duration};
 
 use avian3d::prelude::{
-    AngularVelocity, CenterOfMass, LinearVelocity, RigidBody, Rotation, WakeBody,
+    AngularVelocity, CenterOfMass, Collider, LinearVelocity, RigidBody, Rotation, WakeBody,
 };
 use bevy::prelude::*;
 
 use crate::{
     camera,
+    comparison::SessionMode,
     mass_shift::InternalMassState,
     physics::{
-        COUNTDOWN_SECONDS, CourseRoute, HumanRacer, ObservationCamera, RACER_COUNT, Racer,
-        RacerStart,
+        BALL_RADIUS_METRES, COUNTDOWN_SECONDS, CourseRoute, HumanRacer, ObservationCamera,
+        RACER_COUNT, RaceOnly, Racer, RacerStart,
     },
 };
 
@@ -41,6 +42,7 @@ pub struct RaceState {
     pub elapsed: Duration,
     next_finish_place: usize,
     release_pending: bool,
+    reset_pending: bool,
 }
 
 impl Default for RaceState {
@@ -52,6 +54,7 @@ impl Default for RaceState {
             elapsed: Duration::ZERO,
             next_finish_place: 1,
             release_pending: false,
+            reset_pending: false,
         }
     }
 }
@@ -93,6 +96,15 @@ impl RaceState {
 
     pub fn restart(&mut self) {
         *self = Self::default();
+    }
+
+    pub fn request_reset(&mut self) {
+        self.restart();
+        self.reset_pending = true;
+    }
+
+    pub fn take_reset(&mut self) -> bool {
+        std::mem::take(&mut self.reset_pending)
     }
 
     pub fn countdown_text(&self) -> String {
@@ -206,12 +218,15 @@ pub fn setup_readout(mut commands: Commands) {
     ));
 }
 
-pub fn tick_race(time: Res<Time>, mut race: ResMut<RaceState>) {
-    race.tick(time.delta());
+pub fn tick_race(time: Res<Time>, session: Res<SessionMode>, mut race: ResMut<RaceState>) {
+    if session.is_race() {
+        race.tick(time.delta());
+    }
 }
 
 pub fn release_racers(
     mut commands: Commands,
+    session: Res<SessionMode>,
     mut race: ResMut<RaceState>,
     mut racers: Query<
         (
@@ -224,7 +239,7 @@ pub fn release_racers(
         With<Racer>,
     >,
 ) {
-    if !race.take_release() {
+    if !session.is_race() || !race.take_release() {
         return;
     }
 
@@ -240,11 +255,12 @@ pub fn release_racers(
 }
 
 pub fn update_progress(
+    session: Res<SessionMode>,
     race: Res<RaceState>,
     route: Res<CourseRoute>,
     mut racers: Query<(&Transform, &mut RacerProgress), With<Racer>>,
 ) {
-    if !race.is_racing() {
+    if !session.is_race() || !race.is_racing() {
         return;
     }
 
@@ -259,11 +275,12 @@ pub fn update_progress(
 }
 
 pub fn check_finishes(
+    session: Res<SessionMode>,
     mut race: ResMut<RaceState>,
     route: Res<CourseRoute>,
     mut racers: Query<(&Racer, &Transform, &mut RacerProgress, Has<HumanRacer>)>,
 ) {
-    if !race.is_racing() {
+    if !session.is_race() || !race.is_racing() {
         return;
     }
     let Some(finish) = route.finish else {
@@ -334,14 +351,19 @@ fn leg_advance(route: &CourseRoute, position: Vec3, next_gate: usize) -> f32 {
 }
 
 pub fn update_readout(
+    session: Res<SessionMode>,
     race: Res<RaceState>,
     route: Res<CourseRoute>,
     racers: Query<(&Racer, &Transform, &RacerProgress)>,
     human: Single<&RacerProgress, With<HumanRacer>>,
     readout: Single<&mut Text, With<RaceReadout>>,
 ) {
-    let place = player_place(&route, &racers);
     let mut text = readout.into_inner();
+    if !session.is_race() {
+        text.0.clear();
+        return;
+    }
+    let place = player_place(&route, &racers);
     text.0 = match race.phase {
         RacePhase::PlayerFinished => format!(
             "{} PLACE\n{}\nR rematch | F3 debug",
@@ -361,11 +383,19 @@ pub fn update_readout(
 pub fn handle_rematch(
     mut commands: Commands,
     keys: Res<ButtonInput<KeyCode>>,
+    session: Res<SessionMode>,
     mut race: ResMut<RaceState>,
     mut racers: Query<RacerResetData, (With<Racer>, Without<ObservationCamera>)>,
+    race_only: Query<Entity, With<RaceOnly>>,
     mut camera_transform: Single<&mut Transform, (With<ObservationCamera>, Without<HumanRacer>)>,
 ) {
-    if !keys.just_pressed(KeyCode::KeyR) {
+    if !session.is_race() {
+        return;
+    }
+    if keys.just_pressed(KeyCode::KeyR) {
+        race.request_reset();
+    }
+    if !race.take_reset() {
         return;
     }
 
@@ -395,7 +425,13 @@ pub fn handle_rematch(
             human_start = Some(start.transform.translation);
         }
     }
-    race.restart();
+    for entity in &race_only {
+        commands.entity(entity).insert((
+            Collider::sphere(BALL_RADIUS_METRES),
+            RigidBody::Kinematic,
+            Visibility::Visible,
+        ));
+    }
     if let Some(position) = human_start {
         camera::snap_to_human_position(&mut camera_transform, position);
     }
@@ -516,6 +552,7 @@ mod tests {
             elapsed: Duration::from_secs(8),
             next_finish_place: 3,
             release_pending: false,
+            reset_pending: false,
         };
         race.restart();
         assert!(matches!(race.phase, RacePhase::Countdown { .. }));

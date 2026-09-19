@@ -7,12 +7,16 @@
 use avian3d::prelude::{CenterOfMass, Rotation, WakeBody};
 use bevy::prelude::*;
 
-use crate::physics::{
-    BALL_MASS_KILOGRAMS, BALL_SHELL_MASS_KILOGRAMS, HumanRacer,
-    INTERNAL_MASS_DISPLACEMENT_RADIUS_METRES, INTERNAL_MASS_KILOGRAMS,
-    INTERNAL_MASS_MOVEMENT_SPEED_METRES_PER_SECOND, Racer,
-};
 use crate::race::RaceState;
+use crate::{
+    comparison::SessionMode,
+    control_model::{ControlIntent, ControlModel},
+    physics::{
+        BALL_MASS_KILOGRAMS, BALL_SHELL_MASS_KILOGRAMS, HumanRacer,
+        INTERNAL_MASS_DISPLACEMENT_RADIUS_METRES, INTERNAL_MASS_KILOGRAMS,
+        INTERNAL_MASS_MOVEMENT_SPEED_METRES_PER_SECOND, Racer,
+    },
+};
 
 /// Deliberately centralised prototype values, kept as a resource rather than a
 /// configuration framework so the first control experiment remains quick to tune.
@@ -58,9 +62,18 @@ pub struct InternalMassState {
     pub current_world: Vec3,
 }
 
+type CenterOfMassQuery = (
+    Entity,
+    &'static Rotation,
+    &'static InternalMassState,
+    &'static mut CenterOfMass,
+    Has<HumanRacer>,
+);
+
 /// Converts the four temporary keyboard directions into the stable experiment
 /// frame: W is down-track (+Z), A is track-left (-X), S is up-track (-Z), and
 /// D is track-right (+X). Diagonals are normalised rather than made stronger.
+#[cfg(test)]
 pub fn input_direction(forward: bool, left: bool, backward: bool, right: bool) -> Vec3 {
     let x = f32::from(right) - f32::from(left);
     let z = f32::from(forward) - f32::from(backward);
@@ -98,43 +111,31 @@ pub fn com_world_to_local(com_world: Vec3, body_rotation: Quat) -> Vec3 {
     body_rotation.inverse() * com_world
 }
 
-pub fn read_keyboard_intent(
-    keys: Res<ButtonInput<KeyCode>>,
-    tuning: Res<MassShiftTuning>,
-    race: Res<RaceState>,
-    mut state: Single<&mut InternalMassState, With<HumanRacer>>,
-) {
-    if !race.is_racing() {
-        state.requested_world = Vec3::ZERO;
-        return;
-    }
-
-    let direction = input_direction(
-        keys.pressed(KeyCode::KeyW),
-        keys.pressed(KeyCode::KeyA),
-        keys.pressed(KeyCode::KeyS),
-        keys.pressed(KeyCode::KeyD),
-    );
-
-    // Releasing every key deliberately returns the target to neutral instead
-    // of leaving an invisible control state behind.
-    state.requested_world = clamp_to_horizontal_disk(
-        direction * tuning.displacement_radius_metres,
-        tuning.displacement_radius_metres,
-    );
-}
-
 pub fn advance_internal_mass(
     time: Res<Time>,
     tuning: Res<MassShiftTuning>,
     race: Res<RaceState>,
-    mut states: Query<&mut InternalMassState, With<Racer>>,
+    session: Res<SessionMode>,
+    intent: Res<ControlIntent>,
+    mut states: Query<(&mut InternalMassState, Has<HumanRacer>), With<Racer>>,
 ) {
-    for mut state in &mut states {
-        if !race.is_racing() {
+    for (mut state, is_human) in &mut states {
+        let selected_shift = match session.comparison_model() {
+            Some(ControlModel::Shift) => is_human,
+            Some(_) => false,
+            None => race.is_racing(),
+        };
+        if !selected_shift {
             state.requested_world = Vec3::ZERO;
             state.current_world = Vec3::ZERO;
             continue;
+        }
+
+        if is_human {
+            state.requested_world = clamp_to_horizontal_disk(
+                intent.world_direction * tuning.displacement_radius_metres,
+                tuning.displacement_radius_metres,
+            );
         }
 
         let maximum_distance = tuning.movement_speed_metres_per_second * time.delta_secs();
@@ -151,10 +152,21 @@ pub fn advance_internal_mass(
 pub fn apply_center_of_mass(
     mut commands: Commands,
     tuning: Res<MassShiftTuning>,
-    mut racers: Query<(Entity, &Rotation, &InternalMassState, &mut CenterOfMass), With<Racer>>,
+    race: Res<RaceState>,
+    session: Res<SessionMode>,
+    mut racers: Query<CenterOfMassQuery, With<Racer>>,
 ) {
-    for (entity, rotation, state, mut center_of_mass) in &mut racers {
-        let world_offset = combined_com_world(state.current_world, *tuning);
+    for (entity, rotation, state, mut center_of_mass, is_human) in &mut racers {
+        let shift_active = match session.comparison_model() {
+            Some(ControlModel::Shift) => is_human,
+            Some(_) => false,
+            None => race.is_racing(),
+        };
+        let world_offset = if shift_active {
+            combined_com_world(state.current_world, *tuning)
+        } else {
+            Vec3::ZERO
+        };
         let local_offset = com_world_to_local(world_offset, **rotation);
         **center_of_mass = local_offset;
 

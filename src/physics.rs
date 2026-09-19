@@ -33,6 +33,12 @@ pub struct HumanRacer;
 #[derive(Component)]
 pub struct AiRacer;
 
+/// Racers that participate only in the accepted multi-ball race. Comparison
+/// attempts remove their collider and body rather than hiding visual traffic
+/// that could still change the human experiment.
+#[derive(Component)]
+pub struct RaceOnly;
+
 #[derive(Component, Clone, Copy)]
 pub struct RacerStart {
     pub transform: Transform,

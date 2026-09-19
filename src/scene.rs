@@ -4,10 +4,12 @@ use avian3d::prelude::*;
 use bevy::prelude::*;
 
 use crate::{
+    comparison::SessionMode,
+    control_model::{ControlIntent, ControlModelTuning},
     mass_shift::{InternalMassState, MassShiftTuning},
     physics::{
         AiRacer, BALL_FRICTION, BALL_MASS_KILOGRAMS, BALL_RADIUS_METRES, BALL_RESTITUTION,
-        HumanRacer, Racer, RacerStart,
+        HumanRacer, RaceOnly, Racer, RacerStart,
     },
     race::{DevelopmentDisplay, RacerProgress},
 };
@@ -84,7 +86,7 @@ pub fn setup_scene(
                 ));
             });
         } else {
-            entity.insert(AiRacer);
+            entity.insert((AiRacer, RaceOnly));
         }
     }
 }
@@ -95,6 +97,9 @@ pub fn draw_mass_shift_display(
     mut gizmos: Gizmos,
     human: Single<(&Transform, &LinearVelocity, &InternalMassState), With<HumanRacer>>,
     tuning: Res<MassShiftTuning>,
+    control_tuning: Res<ControlModelTuning>,
+    intent: Res<ControlIntent>,
+    session: Res<SessionMode>,
     display: Res<DevelopmentDisplay>,
 ) {
     if !display.visible {
@@ -103,28 +108,45 @@ pub fn draw_mass_shift_display(
 
     let (ball, velocity, state) = human.into_inner();
     let centre = ball.translation;
+    let Some(model) = session.comparison_model() else {
+        return;
+    };
     let current = centre + state.current_world;
     let target = centre + state.requested_world;
     let boundary_rotation = Quat::from_rotation_x(std::f32::consts::FRAC_PI_2);
 
     gizmos.sphere(Isometry3d::new(centre, Quat::IDENTITY), 0.055, Color::WHITE);
-    gizmos.sphere(
-        Isometry3d::new(current, Quat::IDENTITY),
-        0.10,
-        Color::srgb(1.0, 0.15, 0.15),
-    );
-    gizmos.sphere(
-        Isometry3d::new(target, Quat::IDENTITY),
-        0.065,
-        Color::srgba(0.15, 0.95, 1.0, 0.55),
-    );
-    gizmos.circle(
-        Isometry3d::new(centre + Vec3::Y * 0.015, boundary_rotation),
-        tuning.displacement_radius_metres,
-        Color::srgb(0.3, 0.8, 1.0),
-    );
-    gizmos.line(centre, current, Color::srgb(1.0, 0.15, 0.15));
-    gizmos.line(centre, target, Color::srgba(0.15, 0.95, 1.0, 0.55));
+    match model {
+        crate::control_model::ControlModel::Shift => {
+            gizmos.sphere(
+                Isometry3d::new(current, Quat::IDENTITY),
+                0.10,
+                Color::srgb(1.0, 0.15, 0.15),
+            );
+            gizmos.sphere(
+                Isometry3d::new(target, Quat::IDENTITY),
+                0.065,
+                Color::srgba(0.15, 0.95, 1.0, 0.55),
+            );
+            gizmos.circle(
+                Isometry3d::new(centre + Vec3::Y * 0.015, boundary_rotation),
+                tuning.displacement_radius_metres,
+                Color::srgb(0.3, 0.8, 1.0),
+            );
+            gizmos.line(centre, current, Color::srgb(1.0, 0.15, 0.15));
+            gizmos.line(centre, target, Color::srgba(0.15, 0.95, 1.0, 0.55));
+        }
+        crate::control_model::ControlModel::Torque => gizmos.line(
+            centre,
+            centre + Vec3::Y.cross(intent.world_direction) * control_tuning.torque_newton_metres,
+            Color::srgb(1.0, 0.7, 0.2),
+        ),
+        crate::control_model::ControlModel::Force => gizmos.line(
+            centre,
+            centre + intent.world_direction * control_tuning.force_newtons,
+            Color::srgb(0.85, 0.2, 1.0),
+        ),
+    }
     gizmos.line(
         centre,
         centre + velocity.0.clamp_length_max(4.0),

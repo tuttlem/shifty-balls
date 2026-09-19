@@ -23,6 +23,9 @@ A **controller** supplies a requested internal-mass position:
 
 Neither controller sets velocity, turns a ball, applies a steering force, or
 teleports a ball. Gravity, contact, and ordinary collisions decide the result.
+During the post-First-Race control comparison, this race path deliberately
+remains pinned to SHIFT for both controllers; TORQUE/FORCE AI is deferred until
+human playtest evidence chooses a preferred model.
 
 ## Start and race lifecycle
 
@@ -56,6 +59,9 @@ is sufficient for this single connected route, not a universal track graph.
 | W/A/S/D | Shift the human racer’s internal mass while racing |
 | R | Reset every racer and race record, then begin a fresh countdown |
 | F3 | Toggle human-only mass and velocity development visibility |
+
+`4` now explicitly enters/resets this accepted race path from the human-only
+control comparison. `1`/`2`/`3` are comparison controls, not race controls.
 
 The race display shows countdown/GO, player position, and race time. Once the
 player finishes validly, it shows fixed place, time, and a rematch hint.

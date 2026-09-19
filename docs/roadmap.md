@@ -4,7 +4,10 @@ Shifty Balls is a 3D physics-driven racing game built around rolling balls, mome
 
 The player does **not** directly steer the ball like a vehicle.
 
-Instead, the player influences the physical behaviour of the ball by shifting an internal mass / centre of mass. The resulting imbalance changes how the ball rolls, climbs banks, changes direction, rotates, behaves in the air, lands, recovers, and responds to the environment.
+The initially implemented model influences physical behaviour by shifting an
+internal mass / centre of mass. A post-First-Race experiment now compares that
+SHIFT model with torque-driven and force-driven physical input before the
+project commits to a long-term controller.
 
 The central question behind the project is deliberately simple:
 
@@ -40,6 +43,12 @@ These milestones represent the current intended development path.
 * [x] Build a small prototype course requiring deliberate mass shifting.
 * [x] Determine whether the core mechanic is genuinely enjoyable.
 * [x] Only then introduce multiple racing balls.
+* [x] Add a post-First-Race single-ball comparison harness for SHIFT, TORQUE, and FORCE.
+* [ ] Record controlled owner playtests and choose a provisional control model, or retain an honest inconclusive result.
+
+The actual early sequence is **First Roll → First Shift → First Course → First
+Race → Control Model Comparison**. The final step was discovered from having a
+complete racing vertical slice; it does not rewrite the preceding milestones.
 
 The first major gameplay target is:
 
@@ -302,6 +311,29 @@ Later:
 * [ ] Input rebinding.
 
 Analogue control may eventually become the preferred control method if the mechanic benefits from continuous mass positioning.
+
+---
+
+# 6A. Control Model Comparison — Post-First-Race Design Iteration
+
+First Race was implemented and accepted before this experiment. The purpose is
+to decide whether SHIFT remains the best human control model, not to erase the
+race or retrofit every controller before hands-on evidence exists.
+
+* [x] Preserve First Race as a four-racer SHIFT regression path.
+* [x] Provide normalised human-only attempts on the existing course for SHIFT, TORQUE, and FORCE.
+* [x] Keep ball, gravity, course, start, route, camera purpose, and reset baseline common across models.
+* [x] Use one documented world-horizontal input convention across models.
+* [x] Expose model selection, current model, focused tuning, timer/session best, and development visualisation.
+* [x] Keep TORQUE and FORCE as direct physical inputs without direct velocity, path, orientation, or hidden traction steering.
+* [x] Keep AI deliberately SHIFT-only while comparison is human-focused.
+* [x] Run rotated-order owner trials for all three models.
+* [x] Record evidence for predictability, momentum, banks, recovery, airborne behaviour, and enjoyment.
+* [x] Explicitly retain an inconclusive result after validation.
+* [ ] Adapt AI/racer-controller architecture only after the human control decision.
+
+See [the comparison record](control-model-comparison.md) for procedure,
+constraints, and observations.
 
 ---
 
@@ -1547,6 +1579,18 @@ Specifications remain timestamped and should be created according to coherent wo
 * [x] A complete race can be won.
 
 **At this point Shifty Balls is a racing game.**
+
+## Milestone E.1 — Control Model Comparison (post-First-Race)
+
+* [x] First Race remains available as a SHIFT regression path.
+* [x] SHIFT, TORQUE, and FORCE can be selected for normalised human-only course attempts.
+* [x] Each model retains an explicit physical causal model without direct velocity or path control.
+* [x] Comparison timing, reset, session best, and development display exist.
+* [x] Repeated owner playtests compare all three models fairly.
+* [x] An explicit inconclusive result is recorded from evidence.
+* [ ] AI is adapted only after that human control decision.
+
+**At this point, use evidence from driving to decide what the ball should be.**
 
 ## Milestone F — Physical Racing
 

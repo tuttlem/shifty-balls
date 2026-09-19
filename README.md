@@ -1,13 +1,12 @@
 # Shifty Balls
 
-Shifty Balls is a 3D physics-driven racing game prototype. The eventual player control mechanic
-will influence a rolling ball by shifting its internal mass rather than steering it like a vehicle.
+Shifty Balls is a 3D physics-driven racing game prototype. SHIFT—the original control model—moves
+an internal mass rather than steering like a vehicle. The project now also has a deliberately
+bounded post-race comparison between SHIFT, rotational TORQUE, and translational FORCE.
 
-The project is now at its first-race vertical slice: one human ball and three physical AI balls
-share a compact, hand-authored course. Every racer moves by shifting an internal mass; gravity and
-collision contact, not vehicle steering, determine the response. The initial single-ball result
-was promising, although the course remains demanding and first-race traffic observations are still
-awaiting playtest.
+The accepted First Race remains available: one human ball and three physical SHIFT AI balls share
+a compact hand-authored course. By default, the application starts a human-only comparison attempt
+on that same course so its control alternatives can be evaluated without traffic contamination.
 
 ## Prerequisites
 
@@ -27,26 +26,25 @@ cargo build
 cargo run
 ```
 
-The application window is titled **Shifty Balls**. It stages four distinct balls, counts down,
-then releases them through a compact course with bends, banks, a crest, progression regions, and a
-finish gate. The race display shows countdown, player position, and time; gravity and rigid-body
-contact move every ball.
+The application window is titled **Shifty Balls**. It starts a single-ball comparison attempt on
+the compact course. Select `4` to restore the accepted four-ball race, with its countdown,
+progression, position, finish result, and rematch loop.
 
 ## Temporary Experiment Controls
 
-- `W`: shift the internal mass down-track (+Z)
-- `S`: shift it up-track (-Z)
-- `A`: shift it track-left (-X)
-- `D`: shift it track-right (+X)
-- Combined keys request a normalised diagonal; releasing every key returns the target to centre.
-- `R`: reset every racer and begin a fresh race countdown.
-- `F3`: toggle the human-only development mass and velocity display.
+- `1`: start a normalised single-ball SHIFT comparison attempt.
+- `2`: start a normalised single-ball TORQUE comparison attempt.
+- `3`: start a normalised single-ball FORCE comparison attempt.
+- `4`: enter/reset the accepted First Race path.
+- `W`/`A`/`S`/`D`: request down-track/left/up-track/right in stable world coordinates; diagonals are normalised.
+- `R`: reset the active comparison attempt or start a fresh race countdown.
+- `F3`: toggle development-facing model and velocity visualisation.
 
-The control model is experimental. It does not set velocity, turn the ball, or apply steering
-forces. See [the mass-shift experiment](docs/mass-shift.md) for the current approximation,
-tuning values, display legend, and trial procedure. See [the first course](docs/course.md) for the
-kill-test layout, timing, and observation record, and [the first race](docs/race.md) for the race
-lifecycle, progression model, and current traffic observations.
+The control comparison is experimental. No model sets a desired velocity, orientation, or path:
+SHIFT changes centre of mass, TORQUE applies rotational physics input, and FORCE applies a
+centre-of-mass physical force. See [the comparison record](docs/control-model-comparison.md) for
+the temporary controls, tuning, procedure, and current decision state. See [the first race](docs/race.md)
+for the preserved SHIFT race lifecycle.
 
 ## Validate
 
@@ -72,6 +70,7 @@ until automation provides demonstrated value.
 - Current internal-mass experiment: [docs/mass-shift.md](docs/mass-shift.md)
 - First-course kill test: [docs/course.md](docs/course.md)
 - First-race vertical slice: [docs/race.md](docs/race.md)
+- Post-First-Race control comparison: [docs/control-model-comparison.md](docs/control-model-comparison.md)
 
-The next decision comes from repeated physical races: improve traffic, control, or course evidence
-if it is weak, rather than adding racing content to compensate.
+The next decision comes from controlled playtest evidence: choose a preferred model—or keep the
+result inconclusive—before adapting AI or adding racing content to compensate.

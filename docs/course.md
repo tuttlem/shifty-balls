@@ -2,7 +2,8 @@
 
 This is one compact, hand-authored physical course, not the beginning of a
 track system. It first established whether Shifty Balls was worth another run;
-it now also hosts the deliberately small first-race traffic experiment.
+it now also hosts the deliberately small first-race traffic experiment and the
+post-race human-only control comparison.
 
 ## Layout intent
 
@@ -25,6 +26,13 @@ is the kill-test priority; the crest gives a momentum question without
 confusing the result with airborne behaviour or adding mid-air steering.
 
 ## Controls and timing
+
+For the current control comparison, `1`/`2`/`3` restart this same course with
+SHIFT/TORQUE/FORCE respectively, while `4` restores First Race. The comparison
+removes opponents physically and keeps the ball/course/camera baseline common;
+see [the comparison record](control-model-comparison.md). The original course
+and its difficult final turn remain a possible playtest confounder, not proof
+that one model is superior.
 
 | Input | Behaviour |
 |---|---|
