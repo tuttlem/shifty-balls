@@ -28,11 +28,11 @@ These milestones represent the current intended development path.
 * [x] Open a Bevy game window.
 * [x] Render a minimal 3D scene.
 * [x] Render a sphere representing the player ball.
-* [ ] Select an appropriate initial rigid-body physics approach.
-* [ ] Place the ball under gravity.
-* [ ] Create a simple slope or half-pipe.
-* [ ] Allow the ball to roll freely through physical simulation.
-* [ ] Establish useful follow-camera behaviour.
+* [x] Select an appropriate initial rigid-body physics approach.
+* [x] Place the ball under gravity.
+* [x] Create a simple slope or half-pipe.
+* [x] Allow the ball to roll freely through physical simulation.
+* [x] Establish useful follow-camera behaviour.
 * [ ] Implement an initial internal movable mass / centre-of-mass model.
 * [ ] Allow player input to shift the internal mass.
 * [ ] Produce an observable physical response from shifting the mass.
@@ -134,29 +134,29 @@ The objective is sufficiently robust rigid-body behaviour that makes rolling, ba
 
 ## Requirements
 
-* [ ] Define immediate rigid-body requirements.
-* [ ] Support dynamic spherical rigid bodies.
-* [ ] Support gravity.
-* [ ] Support collision with static track geometry.
-* [ ] Support ball-to-ball collision eventually.
-* [ ] Support friction.
-* [ ] Support restitution/bounce.
-* [ ] Support angular velocity and rotational motion.
-* [ ] Support impulses/forces where required.
-* [ ] Determine how an offset centre of mass can be represented.
+* [x] Define immediate rigid-body requirements.
+* [x] Support dynamic spherical rigid bodies.
+* [x] Support gravity.
+* [x] Support collision with static track geometry.
+* [x] Support ball-to-ball collision eventually.
+* [x] Support friction.
+* [x] Support restitution/bounce.
+* [x] Support angular velocity and rotational motion.
+* [x] Support impulses/forces where required.
+* [x] Determine how an offset centre of mass can be represented.
 * [ ] Determine whether compound colliders or equivalent mechanisms are useful.
-* [ ] Determine whether runtime mass-property modification is practical.
-* [ ] Consider physics debugging/visualisation support.
-* [ ] Consider Bevy integration quality.
-* [ ] Consider maintainability and dependency cost.
+* [x] Determine whether runtime mass-property modification is practical.
+* [x] Consider physics debugging/visualisation support.
+* [x] Consider Bevy integration quality.
+* [x] Consider maintainability and dependency cost.
 
 ## Physics Approach Evaluation
 
-* [ ] Evaluate suitable Bevy-compatible physics libraries.
-* [ ] Evaluate whether an existing physics library provides the required mass-property behaviour.
+* [x] Evaluate suitable Bevy-compatible physics libraries.
+* [x] Evaluate whether an existing physics library provides the required mass-property behaviour.
 * [ ] Evaluate whether any small amount of custom physical modelling is required for the internal-mass mechanic.
-* [ ] Avoid implementing a general-purpose physics engine.
-* [ ] Record the selected approach and reasoning.
+* [x] Avoid implementing a general-purpose physics engine.
+* [x] Record the selected approach and reasoning.
 
 The physics library is infrastructure for the game.
 
@@ -168,18 +168,18 @@ It must not dictate the game design.
 
 Establish a consistent world model before track and movement systems become complicated.
 
-* [ ] Define world axes.
-* [ ] Define which axis represents vertical.
-* [ ] Define forward direction conventions.
-* [ ] Define world units.
-* [ ] Define velocity units.
-* [ ] Define angular conventions where relevant.
-* [ ] Define gravity direction and magnitude conventions.
+* [x] Define world axes.
+* [x] Define which axis represents vertical.
+* [x] Define forward direction conventions.
+* [x] Define world units.
+* [x] Define velocity units.
+* [x] Define angular conventions where relevant.
+* [x] Define gravity direction and magnitude conventions.
 * [ ] Define track-local versus world-space concepts where useful.
-* [ ] Define ball radius conventions.
-* [ ] Define reasonable world scale.
-* [ ] Ensure rendering and physics agree about scale and orientation.
-* [ ] Document conventions sufficiently for future systems.
+* [x] Define ball radius conventions.
+* [x] Define reasonable world scale.
+* [x] Ensure rendering and physics agree about scale and orientation.
+* [x] Document conventions sufficiently for future systems.
 
 Avoid creating unnecessary coordinate abstraction layers.
 
@@ -191,30 +191,30 @@ The first physics milestone should prove that a ball behaves satisfyingly before
 
 ## Ball
 
-* [ ] Create a dynamic spherical rigid body.
-* [ ] Give it appropriate mass.
-* [ ] Give it an appropriate collider.
-* [ ] Apply gravity.
-* [ ] Allow natural rotational motion.
-* [ ] Allow the ball to come to rest where appropriate.
-* [ ] Ensure visual orientation reflects physical rotation where visible/useful.
+* [x] Create a dynamic spherical rigid body.
+* [x] Give it appropriate mass.
+* [x] Give it an appropriate collider.
+* [x] Apply gravity.
+* [x] Allow natural rotational motion.
+* [x] Allow the ball to come to rest where appropriate.
+* [x] Ensure visual orientation reflects physical rotation where visible/useful.
 
 ## Test Track
 
-* [ ] Create a simple inclined surface.
-* [ ] Allow the ball to roll down it.
+* [x] Create a simple inclined surface.
+* [x] Allow the ball to roll down it.
 * [ ] Add a simple curved/banked section if useful.
-* [ ] Prevent immediate accidental escape from the test area.
-* [ ] Keep geometry deliberately primitive.
-* [ ] Avoid building a production track system.
+* [x] Prevent immediate accidental escape from the test area.
+* [x] Keep geometry deliberately primitive.
+* [x] Avoid building a production track system.
 
 ## Physical Feel
 
-* [ ] Establish initial friction.
-* [ ] Establish initial restitution.
-* [ ] Establish initial damping values if required.
-* [ ] Observe acceleration under gravity.
-* [ ] Observe rolling behaviour.
+* [x] Establish initial friction.
+* [x] Establish initial restitution.
+* [x] Establish initial damping values if required.
+* [x] Observe acceleration under gravity.
+* [x] Observe rolling behaviour.
 * [ ] Observe sliding versus rolling.
 * [ ] Observe transition onto different slopes.
 * [ ] Establish a reasonable initial speed range.
@@ -348,10 +348,10 @@ The camera is particularly important because the player must understand speed, s
 
 ## Basic Follow Camera
 
-* [ ] Follow the player ball.
-* [ ] Maintain useful visibility ahead.
-* [ ] Avoid excessive camera rotation caused by ball rotation.
-* [ ] Smooth movement appropriately.
+* [x] Follow the player ball.
+* [x] Maintain useful visibility ahead.
+* [x] Avoid excessive camera rotation caused by ball rotation.
+* [x] Smooth movement appropriately.
 * [ ] Preserve a strong sense of speed.
 * [ ] Preserve track readability.
 * [ ] Handle steep downhill sections.
@@ -1501,13 +1501,13 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone B — First Roll
 
-* [ ] Physics approach selected.
-* [ ] Ball is a rigid body.
-* [ ] Gravity affects the ball.
-* [ ] Ball collides with track.
-* [ ] Ball rolls downhill.
-* [ ] Ball rotation is physically represented.
-* [ ] Camera follows the ball sufficiently for testing.
+* [x] Physics approach selected.
+* [x] Ball is a rigid body.
+* [x] Gravity affects the ball.
+* [x] Ball collides with track.
+* [x] Ball rolls downhill.
+* [x] Ball rotation is physically represented.
+* [x] Camera follows the ball sufficiently for testing.
 
 **At this point we have a ball, not yet a game.**
 

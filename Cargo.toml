@@ -6,6 +6,7 @@ rust-version = "1.95"
 
 [dependencies]
 bevy = "=0.19.1"
+avian3d = "=0.7.0"
 
 [workspace]
 members = ["."]
