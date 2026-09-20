@@ -87,3 +87,22 @@ pub fn configure(app: &mut App) {
     app.add_plugins(PhysicsPlugins::default())
         .insert_resource(Gravity(Vec3::NEG_Y * GRAVITY_METRES_PER_SECOND_SQUARED));
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn broad_gate_accepts_outer_racing_lines_but_rejects_a_bypass() {
+        let gate = ProgressionGate {
+            center: Vec3::ZERO,
+            forward: Vec3::Z,
+            half_width: 7.5,
+            half_height: 2.0,
+            half_depth: 2.5,
+        };
+        assert!(gate.contains(Vec3::new(7.25, 0.0, 0.0)));
+        assert!(!gate.contains(Vec3::new(7.6, 0.0, 0.0)));
+        assert!(!gate.contains(Vec3::new(0.0, 0.0, 2.6)));
+    }
+}

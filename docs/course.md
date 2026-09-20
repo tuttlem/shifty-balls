@@ -15,8 +15,10 @@ unrelated objects.
 1. A level start deck and forgiving downhill establish momentum and lateral
    control.
 2. A broad gentle bend acts as an implicit tutorial: shift weight, change line.
-3. A wider, stronger bank offers a high/low line. A poor entry loses useful
-   position but retaining boundaries provide a chance to recover.
+3. A 16-metre-wide, softened bank and its continuous run-out form the physical
+   racing section. It offers a high/low line around centre-seeking opponents;
+   retaining boundaries keep a poor traffic displacement recoverable without
+   hiding it with a reset or collision aid.
 4. A compression and uphill crest expose whether the player preserved enough
    momentum through the preceding line.
 5. A final descent and bright gate form one obvious finish apron.
@@ -31,8 +33,8 @@ For the current control comparison, `1`/`2`/`3` restart this same course with
 SHIFT/TORQUE/FORCE respectively, while `4` restores First Race. The comparison
 removes opponents physically and keeps the ball/course/camera baseline common;
 see [the comparison record](control-model-comparison.md). The original course
-and its difficult final turn remain a possible playtest confounder, not proof
-that one model is superior.
+and its physical-racing section remain a possible playtest confounder, not
+proof that one model is superior.
 
 | Input | Behaviour |
 |---|---|
@@ -47,8 +49,10 @@ leaderboard.
 ## Tuning and camera
 
 The existing mass ratio, displacement, movement speed, gravity, friction, and
-restitution remain the initial baseline. This course adds no direct steering,
-propulsion, traction assistance, velocity cap, or artificial acceleration.
+restitution remain the initial baseline. The physical-racing pass widens and
+softens the known traffic bottleneck but adds no direct steering, propulsion,
+traction assistance, velocity cap, collision-specific assistance, or artificial
+acceleration.
 
 The camera remains world-up and independent from ball rotation. It now starts
 behind and above the ball with an early down-track look target, and snaps to
@@ -78,6 +82,10 @@ The project owner accepted this initial kill-test pass on 19 September 2026.
 The evidence supports continuing Shifty Balls, but it does **not** validate this
 course as appropriately learnable. The immediate follow-up should soften and
 broaden the opening course before any racing systems are considered.
+
+That follow-up is now signed off as the Physical Racing Playtest: the widened,
+softened bank supported successful repeated races with ordinary traffic. It is
+one validated racing section, not a general track-language decision.
 
 ## Known limits and next questions
 

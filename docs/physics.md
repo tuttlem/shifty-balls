@@ -43,6 +43,13 @@ There is no linear or angular damping in the first run. If repeatable jitter
 prevents a ball from settling, a later tuning change must document its reason
 rather than hiding it as an unexplained gameplay force.
 
+The Physical Racing Playtest retains these shared values and Avian's default
+solver configuration. Its first tuning lever is the widened, softened course
+section, not collision impulses, per-racer material changes, catch-up speed, or
+automatic recovery. Any later material or solver adjustment requires a
+repeatable native playtest observation and a rerun of the physical-race
+procedure.
+
 ## Debugging and current boundary
 
 Avian can draw collision geometry, but normal cargo run stays clean and this

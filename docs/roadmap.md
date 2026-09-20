@@ -1594,13 +1594,13 @@ Specifications remain timestamped and should be created according to coherent wo
 
 ## Milestone F — Physical Racing
 
-* [ ] Collision behaviour is tuned.
-* [ ] Overtaking is possible.
-* [ ] Track geometry creates racing decisions.
-* [ ] Traffic affects line choice.
-* [ ] Recovery after collisions is satisfying.
-* [ ] Different lines through major track elements are viable.
-* [ ] Race outcomes reflect meaningful player skill.
+* [x] Collision behaviour is tuned.
+* [x] Overtaking is possible.
+* [x] Track geometry creates racing decisions.
+* [x] Traffic affects line choice.
+* [x] Recovery after collisions is satisfying.
+* [x] Different lines through major track elements are viable.
+* [x] Race outcomes reflect meaningful player skill.
 
 ## Milestone G — Track Language
 

@@ -16,6 +16,9 @@ const SURFACE_OVERLAP: f32 = 0.3;
 const RETAINING_WALL_THICKNESS: f32 = 0.4;
 const RETAINING_WALL_HEIGHT: f32 = 1.5;
 const COURSE_WIDTH: f32 = 12.0;
+const RACING_SECTION_WIDTH: f32 = 16.0;
+const RACING_SECTION_GATE_HALF_WIDTH: f32 = 7.5;
+const DEFAULT_GATE_HALF_WIDTH: f32 = 5.0;
 
 #[derive(Clone, Copy)]
 struct SurfaceSpec {
@@ -82,15 +85,17 @@ pub fn setup_course(
     }
     gates.push(progression_gate(cursor, surface_rotation(16.0, 3.0, 6.0)));
 
-    // The wider, stronger turn is the first high/low line. Walls keep a poor
-    // choice consequential but usually recoverable rather than terminal.
+    // This deliberately broad bank and run-out are the physical-racing
+    // experiment. The centre-seeking AI leaves a high/low line for the player,
+    // while continuous walls make a traffic displacement consequential but
+    // recoverable without a reset or collision-specific assistance.
     for (yaw, bank_degrees) in [
-        (8.0, -8.0),
-        (0.0, -12.0),
-        (-8.0, -16.0),
-        (-16.0, -18.0),
-        (-24.0, -16.0),
-        (-32.0, -12.0),
+        (8.0, -6.0),
+        (0.0, -9.0),
+        (-8.0, -12.0),
+        (-16.0, -14.0),
+        (-24.0, -12.0),
+        (-32.0, -9.0),
     ] {
         cursor = spawn_surface(
             &mut commands,
@@ -98,13 +103,14 @@ pub fn setup_course(
             bank.clone(),
             boundary.clone(),
             cursor,
-            SurfaceSpec::new(14.0, 4.0, surface_rotation(yaw, 2.0, bank_degrees)),
+            SurfaceSpec::new(
+                RACING_SECTION_WIDTH,
+                4.0,
+                surface_rotation(yaw, 2.0, bank_degrees),
+            ),
         );
     }
-    gates.push(progression_gate(
-        cursor,
-        surface_rotation(-32.0, 2.0, -12.0),
-    ));
+    gates.push(progression_gate(cursor, surface_rotation(-32.0, 2.0, -9.0)));
 
     cursor = spawn_surface(
         &mut commands,
@@ -112,7 +118,11 @@ pub fn setup_course(
         momentum.clone(),
         boundary.clone(),
         cursor,
-        SurfaceSpec::new(COURSE_WIDTH, 12.0, surface_rotation(-32.0, 6.0, 0.0)),
+        SurfaceSpec::new(
+            RACING_SECTION_WIDTH,
+            12.0,
+            surface_rotation(-32.0, 6.0, 0.0),
+        ),
     );
     cursor = spawn_surface(
         &mut commands,
@@ -120,7 +130,11 @@ pub fn setup_course(
         momentum.clone(),
         boundary.clone(),
         cursor,
-        SurfaceSpec::new(10.0, 12.0, surface_rotation(-32.0, -9.0, 0.0)),
+        SurfaceSpec::new(
+            RACING_SECTION_WIDTH,
+            12.0,
+            surface_rotation(-32.0, -9.0, 0.0),
+        ),
     );
     cursor = spawn_surface(
         &mut commands,
@@ -128,9 +142,17 @@ pub fn setup_course(
         momentum,
         boundary.clone(),
         cursor,
-        SurfaceSpec::new(10.0, 8.0, surface_rotation(-32.0, -2.0, 0.0)),
+        SurfaceSpec::new(
+            RACING_SECTION_WIDTH,
+            8.0,
+            surface_rotation(-32.0, -2.0, 0.0),
+        ),
     );
-    gates.push(progression_gate(cursor, surface_rotation(-32.0, -2.0, 0.0)));
+    gates.push(progression_gate_with_width(
+        cursor,
+        surface_rotation(-32.0, -2.0, 0.0),
+        RACING_SECTION_GATE_HALF_WIDTH,
+    ));
     let finish_start = cursor;
     let finish_rotation = surface_rotation(-32.0, 4.0, 0.0);
     let finish_end = spawn_surface(
@@ -166,10 +188,14 @@ pub fn setup_course(
 }
 
 fn progression_gate(center: Vec3, rotation: Quat) -> ProgressionGate {
+    progression_gate_with_width(center, rotation, DEFAULT_GATE_HALF_WIDTH)
+}
+
+fn progression_gate_with_width(center: Vec3, rotation: Quat, half_width: f32) -> ProgressionGate {
     ProgressionGate {
         center: center + Vec3::Y,
         forward: (rotation * Vec3::Z).with_y(0.0).normalize_or_zero(),
-        half_width: 5.0,
+        half_width,
         half_height: 4.0,
         half_depth: 2.5,
     }
@@ -285,5 +311,14 @@ mod tests {
     fn surface_transform_places_the_top_at_the_logical_start() {
         let transform = surface_transform(Vec3::new(0.0, 5.0, -2.0), 10.0, Quat::IDENTITY);
         assert_eq!(transform.translation, Vec3::new(0.0, 4.75, 3.0));
+    }
+
+    #[test]
+    fn racing_section_gate_accepts_a_full_width_line_without_accepting_a_shortcut() {
+        let gate =
+            progression_gate_with_width(Vec3::ZERO, Quat::IDENTITY, RACING_SECTION_GATE_HALF_WIDTH);
+        assert!(gate.contains(Vec3::new(7.25, 1.0, 0.5)));
+        assert!(!gate.contains(Vec3::new(7.6, 1.0, 0.0)));
+        assert!(!gate.contains(Vec3::new(0.0, 1.0, 3.0)));
     }
 }

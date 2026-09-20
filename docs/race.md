@@ -66,16 +66,43 @@ control comparison. `1`/`2`/`3` are comparison controls, not race controls.
 The race display shows countdown/GO, player position, and race time. Once the
 player finishes validly, it shows fixed place, time, and a rematch hint.
 
+## Physical Racing Playtest
+
+The first race identified its final turn as too punishing for traffic. The
+current physical-racing pass turns that bank and its immediate run-out into a
+16-metre-wide, modestly softened section with continuous low retaining walls.
+Its exit progression region is widened with the surface, so both high and low
+physical lines remain valid while the route stays connected and ordered.
+
+Human and AI racers retain the same SHIFT internal-mass control, fair start,
+ordinary Avian contact, race lifecycle, camera purpose, and rematch. There are
+no collision attacks, recovery forces, scripted passes, catch-up speed, AI
+overtaking logic, or route branches. The required three-race native desktop
+procedure is [documented here](specs/20260920-192559-physical-racing-playtest/quickstart.md).
+
+| Question | Observation | Result |
+|---|---|---|
+| Is contact readable in the widened section? | Owner completed multiple successful races and reported ordinary traffic as clear and good. | Yes |
+| Can a player recover after traffic contact? | Owner reported successful races with the widened, continuously walled recovery section. | Yes |
+| Do high and low lines permit natural overtaking? | Owner reported the passing-line checks as good across successful races. | Yes |
+| Does the camera/readout remain readable under traffic? | Owner reported the complete race experience as good. | Yes |
+| Do outcomes reflect line choice and player skill? | Owner reported repeated successful races and no outstanding gameplay concern. | Promising; affirmative |
+
+The project owner signed off the Physical Racing Playtest on 20 September 2026.
+The result validates this bounded course-and-traffic pass; it does not claim
+that advanced AI, alternate routes, track language, or broader collision polish
+are complete.
+
 ## Known limitations and first-race record
 
 - AI is intentionally course-aware but simple. It targets broad route regions;
   it has no avoidance, overtaking logic, strategic lines, difficulty modes, or
   teleport recovery.
-- Collision gameplay is not tuned. This slice exists to find out whether
-  ordinary contact is fun before designing any collision-specific rules.
-- The course was already known to be demanding. It may prove too narrow or
-  unforgiving for traffic; that is useful evidence, not a reason to hide the
-  problem with additional systems.
+- Collision gameplay remains an ordinary-physics experiment. This pass changes
+  course space first; it does not add collision-specific rules.
+- The widened bank may still prove too difficult, too easy, or too chaotic for
+  traffic. The physical-racing observation record must capture that result
+  honestly rather than hide it with additional systems.
 - R is the recovery path for a racer that falls, stalls, or becomes trapped.
 
 Record the following after the manual procedure in the First Race

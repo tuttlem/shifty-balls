@@ -5,7 +5,9 @@ an internal mass rather than steering like a vehicle. The project now also has a
 bounded post-race comparison between SHIFT, rotational TORQUE, and translational FORCE.
 
 The accepted First Race remains available: one human ball and three physical SHIFT AI balls share
-a compact hand-authored course. By default, the application starts a human-only comparison attempt
+a compact hand-authored course. Its current Physical Racing Playtest widens and softens the known
+traffic bottleneck into a high/low-line recovery section, while retaining ordinary physics and
+SHIFT-only human/AI control. By default, the application starts a human-only comparison attempt
 on that same course so its control alternatives can be evaluated without traffic contamination.
 
 ## Prerequisites
@@ -72,5 +74,10 @@ until automation provides demonstrated value.
 - First-race vertical slice: [docs/race.md](docs/race.md)
 - Post-First-Race control comparison: [docs/control-model-comparison.md](docs/control-model-comparison.md)
 
-The next decision comes from controlled playtest evidence: choose a preferred model—or keep the
-result inconclusive—before adapting AI or adding racing content to compensate.
+The next decision comes from the three-race physical-racing playtest: establish whether traffic,
+recovery, and passing are readable and skillful before adding broader track language or AI racing
+behaviour.
+
+The owner has signed off this physical-racing pass after successful repeated
+races. The next work should continue through bounded track-language or race
+experience experiments rather than adding hidden traffic assistance.
