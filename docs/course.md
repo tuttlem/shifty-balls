@@ -15,13 +15,16 @@ unrelated objects.
 1. A level start deck and forgiving downhill establish momentum and lateral
    control.
 2. A broad gentle bend acts as an implicit tutorial: shift weight, change line.
-3. A 16-metre-wide, softened bank and its continuous run-out form the physical
-   racing section. It offers a high/low line around centre-seeking opponents;
-   retaining boundaries keep a poor traffic displacement recoverable without
-   hiding it with a reset or collision aid.
-4. A compression and uphill crest expose whether the player preserved enough
+3. A 16-metre-long faceted half-pipe follows the bend. A 4-metre flat low
+   channel, two increasingly steep strips on each side, and walls only at the
+   two outer lips make a visible low/high-line experiment without an internal
+   barrier, hidden lane, or automatic recovery.
+4. The existing 16-metre-wide softened bank and its continuous run-out remain
+   a separate traffic section after the half-pipe. Its broad progression gate
+   accepts physical exit lines while preserving the ordered route.
+5. A compression and uphill crest expose whether the player preserved enough
    momentum through the preceding line.
-5. A final descent and bright gate form one obvious finish apron.
+6. A final descent and bright gate form one obvious finish apron.
 
 There is deliberately no jump or drop in this version. Grounded mass control
 is the kill-test priority; the crest gives a momentum question without
@@ -87,6 +90,30 @@ That follow-up is now signed off as the Physical Racing Playtest: the widened,
 softened bank supported successful repeated races with ordinary traffic. It is
 one validated racing section, not a general track-language decision.
 
+## Half-pipe track-language experiment
+
+The half-pipe is a single hand-authored experiment, not a reusable curved-track
+or track-generation system. It retains the established gravity, friction,
+restitution, collision, camera, and SHIFT internal-mass baseline. The only
+containment is visible at the outer lips; a poor in-bounds line must be worked
+back toward the flat channel through normal W/A/S/D input, or be recorded as a
+negative finding. There is no auto-centering, steering force, teleport,
+collision recovery, or scripted passing.
+
+Run the three-race procedure in the half-pipe [quickstart](specs/20260920-202718-half-pipe-racing-section/quickstart.md)
+with `4` selected. Record the result before marking any half-pipe roadmap item
+complete.
+
+| Question | Observation | Result |
+|---|---|---|
+| Does a high line visibly differ from the flat low line? | Across the owner’s completed procedure, both low and higher physical lines worked and remained readable. | Yes |
+| Can an in-bounds poor entry, wall climb, or low-speed state find a readable normal-control route to the exit? | The owner confirmed normal-control recovery and onward progress worked. | Yes |
+| Is the half-pipe understandable and worth replaying? | The owner confirmed that the complete half-pipe procedure worked. | Yes, initial evidence |
+
+The project owner signed off the Half-Pipe Racing Section on 20 September
+2026. This validates one useful half-pipe experiment; it does not yet validate
+other track-element types or a general track-construction system.
+
 ## Known limits and next questions
 
 - The course intentionally has no automatic failure detector; R is the fast
@@ -95,3 +122,6 @@ one validated racing section, not a general track-language decision.
   playtesting must still look for snags at joins.
 - The first pass does not claim an ideal duration, speed range, camera feel, or
   final tuning. Record those findings before considering Milestone E.
+- The signed-off half-pipe is one promising track-language result. Further
+  elements still need their own bounded evidence rather than inheriting this
+  result.

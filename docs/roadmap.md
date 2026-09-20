@@ -429,7 +429,7 @@ Tracks should exploit rolling-ball physics rather than resemble ordinary roads.
 * [x] Straight downhill section.
 * [x] Gentle curve.
 * [x] Banked curve.
-* [ ] Half-pipe.
+* [x] Half-pipe.
 * [ ] Bowl.
 * [ ] Funnel.
 * [ ] Ramp.
@@ -1605,7 +1605,7 @@ Specifications remain timestamped and should be created according to coherent wo
 ## Milestone G — Track Language
 
 * [ ] Several track-element types exist.
-* [ ] Half-pipes are useful.
+* [x] Half-pipes are useful.
 * [ ] Banks are useful.
 * [ ] Jumps are useful.
 * [ ] Bowls/funnels are useful.

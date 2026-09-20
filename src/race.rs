@@ -489,6 +489,31 @@ mod tests {
     }
 
     #[test]
+    fn an_inserted_half_pipe_gate_stays_ordered_and_is_required_for_the_finish() {
+        let mut progress = RacerProgress::default();
+        const GATE_COUNT_WITH_HALF_PIPE: usize = 5;
+
+        assert!(advance_through_gate(&mut progress, 0));
+        assert!(advance_through_gate(&mut progress, 1));
+        assert!(!advance_through_gate(&mut progress, 3));
+        assert!(advance_through_gate(&mut progress, 2));
+        assert!(!finish_if_eligible(
+            &mut progress,
+            GATE_COUNT_WITH_HALF_PIPE,
+            Duration::from_secs(12),
+            1,
+        ));
+        assert!(advance_through_gate(&mut progress, 3));
+        assert!(advance_through_gate(&mut progress, 4));
+        assert!(finish_if_eligible(
+            &mut progress,
+            GATE_COUNT_WITH_HALF_PIPE,
+            Duration::from_secs(12),
+            1,
+        ));
+    }
+
+    #[test]
     fn finishing_requires_all_gates_and_is_immutable() {
         let mut progress = RacerProgress::default();
         assert!(!finish_if_eligible(

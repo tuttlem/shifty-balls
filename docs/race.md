@@ -93,6 +93,28 @@ The result validates this bounded course-and-traffic pass; it does not claim
 that advanced AI, alternate routes, track language, or broader collision polish
 are complete.
 
+## Half-pipe race validation
+
+The next bounded course experiment inserts a broad five-strip half-pipe between
+the forgiving bend and this signed-off traffic bank. Its new broad exit region
+is simply another required ordered gate: the current AI still targets its
+centre through SHIFT, and the generic race lifecycle, place/result, and `R`
+rematch remain unchanged. The half-pipe adds no avoidance, passing script,
+catch-up, collision attack, or recovery mechanic.
+
+Use the half-pipe [quickstart](specs/20260920-202718-half-pipe-racing-section/quickstart.md)
+to record live four-racer evidence before sign-off.
+
+| Question | Observation | Result |
+|---|---|---|
+| Does traffic, side-by-side running, or an order change occur in or around the half-pipe without invalidating progression? | The owner confirmed the complete four-racer procedure worked with valid progression. | Yes |
+| Does the camera/readout leave a useful exit or recovery direction at a high line and after contact? | The owner confirmed the section remained usable throughout the procedure. | Yes |
+| Does a rematch restore a fair, usable baseline through the half-pipe? | The owner confirmed repeated race runs worked. | Yes |
+
+The owner’s three-race half-pipe validation is signed off. The existing fair
+start, physical traffic, ordered route, place/result, and rematch loop remain
+the baseline; this result does not justify AI strategy or recovery assistance.
+
 ## Known limitations and first-race record
 
 - AI is intentionally course-aware but simple. It targets broad route regions;

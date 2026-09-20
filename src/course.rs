@@ -19,13 +19,18 @@ const COURSE_WIDTH: f32 = 12.0;
 const RACING_SECTION_WIDTH: f32 = 16.0;
 const RACING_SECTION_GATE_HALF_WIDTH: f32 = 7.5;
 const DEFAULT_GATE_HALF_WIDTH: f32 = 5.0;
+const HALF_PIPE_STRIP_WIDTH: f32 = 4.0;
+const HALF_PIPE_LENGTH: f32 = 16.0;
+const HALF_PIPE_INNER_BANK_DEGREES: f32 = 18.0;
+const HALF_PIPE_OUTER_BANK_DEGREES: f32 = 38.0;
+const HALF_PIPE_EXIT_GATE_HALF_WIDTH: f32 = 8.0;
 
 #[derive(Clone, Copy)]
 struct SurfaceSpec {
     width: f32,
     logical_length: f32,
     rotation: Quat,
-    retaining_walls: bool,
+    retaining_wall_sides: [bool; 2],
 }
 
 impl SurfaceSpec {
@@ -34,9 +39,20 @@ impl SurfaceSpec {
             width,
             logical_length,
             rotation,
-            retaining_walls: true,
+            retaining_wall_sides: [true, true],
         }
     }
+
+    fn with_retaining_wall_sides(mut self, retaining_wall_sides: [bool; 2]) -> Self {
+        self.retaining_wall_sides = retaining_wall_sides;
+        self
+    }
+}
+
+#[derive(Clone, Copy)]
+struct HalfPipeStrip {
+    start_top: Vec3,
+    spec: SurfaceSpec,
 }
 
 pub fn setup_course(
@@ -84,6 +100,28 @@ pub fn setup_course(
         );
     }
     gates.push(progression_gate(cursor, surface_rotation(16.0, 3.0, 6.0)));
+
+    // Five simple strips make a broad, faceted U rather than a curved-mesh
+    // system. The centre stays flat for a readable recovery line; only the
+    // exposed lips have walls, so crossing between lines never hits a hidden
+    // barrier. Every rendered strip still owns its matching static collider.
+    let half_pipe_rotation = surface_rotation(16.0, 3.0, 0.0);
+    for strip in half_pipe_strips(cursor, half_pipe_rotation) {
+        spawn_surface(
+            &mut commands,
+            &mut meshes,
+            bank.clone(),
+            boundary.clone(),
+            strip.start_top,
+            strip.spec,
+        );
+    }
+    cursor = advance_surface_start(cursor, HALF_PIPE_LENGTH, half_pipe_rotation);
+    gates.push(progression_gate_with_width(
+        cursor,
+        half_pipe_rotation,
+        HALF_PIPE_EXIT_GATE_HALF_WIDTH,
+    ));
 
     // This deliberately broad bank and run-out are the physical-racing
     // experiment. The centre-seeking AI leaves a high/low line for the player,
@@ -201,6 +239,56 @@ fn progression_gate_with_width(center: Vec3, rotation: Quat, half_width: f32) ->
     }
 }
 
+fn half_pipe_strips(low_start: Vec3, course_rotation: Quat) -> [HalfPipeStrip; 5] {
+    let inner_bank = HALF_PIPE_INNER_BANK_DEGREES.to_radians();
+    let outer_bank = HALF_PIPE_OUTER_BANK_DEGREES.to_radians();
+    let half_width = HALF_PIPE_STRIP_WIDTH * 0.5;
+    let inner_centre_x = half_width + half_width * inner_bank.cos();
+    let inner_centre_y = half_width * inner_bank.sin();
+    let outer_centre_x = HALF_PIPE_STRIP_WIDTH
+        + HALF_PIPE_STRIP_WIDTH * inner_bank.cos()
+        + half_width * outer_bank.cos();
+    let outer_centre_y = HALF_PIPE_STRIP_WIDTH * inner_bank.sin() + half_width * outer_bank.sin();
+    let strip =
+        |x: f32, y: f32, bank_degrees: f32, retaining_wall_sides: [bool; 2]| HalfPipeStrip {
+            start_top: low_start + course_rotation * Vec3::new(x, y, 0.0),
+            spec: SurfaceSpec::new(
+                HALF_PIPE_STRIP_WIDTH,
+                HALF_PIPE_LENGTH,
+                course_rotation * Quat::from_rotation_z(bank_degrees.to_radians()),
+            )
+            .with_retaining_wall_sides(retaining_wall_sides),
+        };
+
+    [
+        strip(
+            -outer_centre_x,
+            outer_centre_y,
+            -HALF_PIPE_OUTER_BANK_DEGREES,
+            [true, false],
+        ),
+        strip(
+            -inner_centre_x,
+            inner_centre_y,
+            -HALF_PIPE_INNER_BANK_DEGREES,
+            [false, false],
+        ),
+        strip(0.0, 0.0, 0.0, [false, false]),
+        strip(
+            inner_centre_x,
+            inner_centre_y,
+            HALF_PIPE_INNER_BANK_DEGREES,
+            [false, false],
+        ),
+        strip(
+            outer_centre_x,
+            outer_centre_y,
+            HALF_PIPE_OUTER_BANK_DEGREES,
+            [false, true],
+        ),
+    ]
+}
+
 fn spawn_surface(
     commands: &mut Commands,
     meshes: &mut Assets<Mesh>,
@@ -223,8 +311,8 @@ fn spawn_surface(
         transform,
     ));
 
-    if spec.retaining_walls {
-        for side in [-1.0, 1.0] {
+    for (side, retained) in [-1.0, 1.0].into_iter().zip(spec.retaining_wall_sides) {
+        if retained {
             let local_position = Vec3::new(
                 side * (spec.width * 0.5 + RETAINING_WALL_THICKNESS * 0.5),
                 RETAINING_WALL_HEIGHT * 0.5,
@@ -319,6 +407,52 @@ mod tests {
             progression_gate_with_width(Vec3::ZERO, Quat::IDENTITY, RACING_SECTION_GATE_HALF_WIDTH);
         assert!(gate.contains(Vec3::new(7.25, 1.0, 0.5)));
         assert!(!gate.contains(Vec3::new(7.6, 1.0, 0.0)));
+        assert!(!gate.contains(Vec3::new(0.0, 1.0, 3.0)));
+    }
+
+    #[test]
+    fn half_pipe_strips_are_symmetric_and_share_one_forward_direction() {
+        let start = Vec3::new(3.0, 4.0, 5.0);
+        let course_rotation = surface_rotation(16.0, 3.0, 0.0);
+        let strips = half_pipe_strips(start, course_rotation);
+
+        assert_eq!(strips.len(), 5);
+        assert_eq!(strips[2].start_top, start);
+        for (left, right) in strips[..2].iter().zip(strips[3..].iter().rev()) {
+            let left_local = course_rotation.inverse() * (left.start_top - start);
+            let right_local = course_rotation.inverse() * (right.start_top - start);
+            assert!((left_local.x + right_local.x).abs() < 0.0001);
+            assert!((left_local.y - right_local.y).abs() < 0.0001);
+            for strip in [left, right] {
+                let advance =
+                    advance_surface_start(strip.start_top, HALF_PIPE_LENGTH, strip.spec.rotation)
+                        - strip.start_top;
+                assert!((advance - course_rotation * Vec3::Z * HALF_PIPE_LENGTH).length() < 0.0001);
+            }
+        }
+        assert_eq!(
+            advance_surface_start(
+                strips[2].start_top,
+                HALF_PIPE_LENGTH,
+                strips[2].spec.rotation
+            ),
+            start + course_rotation * Vec3::Z * HALF_PIPE_LENGTH,
+        );
+    }
+
+    #[test]
+    fn half_pipe_only_walls_its_two_outer_lips_and_uses_a_broad_exit_gate() {
+        let strips = half_pipe_strips(Vec3::ZERO, Quat::IDENTITY);
+        assert_eq!(strips[0].spec.retaining_wall_sides, [true, false]);
+        assert_eq!(strips[1].spec.retaining_wall_sides, [false, false]);
+        assert_eq!(strips[2].spec.retaining_wall_sides, [false, false]);
+        assert_eq!(strips[3].spec.retaining_wall_sides, [false, false]);
+        assert_eq!(strips[4].spec.retaining_wall_sides, [false, true]);
+
+        let gate =
+            progression_gate_with_width(Vec3::ZERO, Quat::IDENTITY, HALF_PIPE_EXIT_GATE_HALF_WIDTH);
+        assert!(gate.contains(Vec3::new(7.9, 1.0, 0.5)));
+        assert!(!gate.contains(Vec3::new(8.1, 1.0, 0.0)));
         assert!(!gate.contains(Vec3::new(0.0, 1.0, 3.0)));
     }
 }

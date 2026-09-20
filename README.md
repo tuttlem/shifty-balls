@@ -81,3 +81,9 @@ behaviour.
 The owner has signed off this physical-racing pass after successful repeated
 races. The next work should continue through bounded track-language or race
 experience experiments rather than adding hidden traffic assistance.
+
+The five-strip half-pipe before that traffic section is now signed off after
+the owner completed its desktop procedure. Use `4` to enter the race, then see
+the [half-pipe record](docs/specs/20260920-202718-half-pipe-racing-section/quickstart.md).
+This validates one useful half-pipe, not general track generation or other
+track-element types.
